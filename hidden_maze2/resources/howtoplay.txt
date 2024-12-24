@@ -1,0 +1,31 @@
+The goal of this game is to traverse a hidden maze using the four arrow keys.  You will start
+in the upper left corner and proceed to the lower right corner.  Along the way you will collide 
+with five types of walls.  Each wall, except the rubber wall, will give you a bruise.
+
+Types of Walls
+
+Solid   (Black)       walls cannot be penetrated unless you use a bomb
+Hard    (Dark gray)   will break if you hit them 3 times
+Medium  (Medium gray) will break if you hit them 2 times
+Soft    (Light gray)  will break if you hit them once
+Rubber  (Magenta)     no bruise, but you will be bounced to a random location
+
+You will lose the game if you take more than 60 seconds to traverse the maze or if you receive
+50 bruises.  Points are awarded as you progress through the maze.
+
+The maze is flashed for one second at the beginning of the game.  You can also request another
+flash using the F key.
+
+Key Assignments
+
+Each feature will cost you time, bruises, and points and may only be used once.
+
+B (3 seconds, 2 bruises, 2 points)  A Bomb is used to clear the 8 adjacent cells.
+J (3 seconds, 1 bruise,  1 point)   Jump over a cell in any direction
+L (2 seconds, 1 bruise,  1 point)   Light up the 8 adjacent cells. 
+F (1 second,  1 bruise,  1 point)   Flash the maze for 1 second.  You will be bounced to a new location.
+
+Q = Quit the game.
+
+
+Good luck.
