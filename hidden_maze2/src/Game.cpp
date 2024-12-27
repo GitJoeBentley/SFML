@@ -13,7 +13,7 @@ Game::Game(sf::RenderWindow& wind, const std::string& name_)
       sounds(),
       border(sf::Vector2f(GameWindowSize, GameWindowSize)),
       door1(CellSize),door2(CellSize),
-      titleText(name_ + "'s Hidden Maze Game - Version 2.0", Fonts::Kristan, 36),
+      titleText(name_ + "'s Hidden Maze Game - Version 2.1", Fonts::Kristan, 36),
       statusText("Time 60\nBruises 0\nScore 0", Fonts::Courier, 24 ),
       displayMaze(false)
 {
@@ -109,7 +109,7 @@ void Game::setStatus(Game::GameStatus status_)
 }
 void Game::toggleDisplayMaze()
 {
-    displayMaze = !displayMaze;
+    if (player->getName()[0] == 'J') displayMaze = !displayMaze;
 }
 
 void Game::incrementBruises()
@@ -171,7 +171,7 @@ void Game::draw_and_display()
     window.draw(titleText);
     timeBar.setSize(sf::Vector2f(timeBarStartWidth * timePercentRemaining, timeBarHeight));
     // change timebar color
-    timeBar.setFillColor(sf::Color((1-timePercentRemaining)*255,timePercentRemaining*255,0));
+    timeBar.setFillColor(sf::Color(static_cast<sf::Uint8>((1-timePercentRemaining)*255),static_cast<sf::Uint8>(timePercentRemaining*255),0));
 
     window.draw(timeBar);
     if (player->getPath().size() > 1) player->draw_path(window);
@@ -180,13 +180,17 @@ void Game::draw_and_display()
     {
         grid->draw_path(window);
         grid->draw(window);
+        grid->drawCat(window);
     }
     else border.setTexture(&borderTexture);
+
+    if (player->catIsVisited()) grid->drawCat(window);
 
     player->draw(window);
     if (getStatus() == Game::NotStarted && !displayMaze) start();
     // Start ticking sound
     if (getCountdown() == 10 && sounds.getSound(Sounds::Tick).getStatus() == sf::SoundSource::Stopped) sounds.play(Sounds::Tick, 20.0f);
+
     window.display();
 }
 
@@ -315,6 +319,7 @@ bool Game::flash()
             player->incrementBruises();
             bounce();
         }
+        if (!player->catIsVisited()) grid->moveCat();
         return true;
     }
     sounds.play(Sounds::Fart);

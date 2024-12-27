@@ -67,12 +67,25 @@ Wall::Type Player::processMove(const sf::Vector2i& newLocation)
     else
     {
         cellType = ptrCell->getType();
-
         if (cellType == Wall::Rubber)
         {
             sounds.play(Sounds::Bounce);
             bounce();
             addToPath(100 * newLocation.x + newLocation.y);
+            return cellType;
+        }
+        if (cellType == Wall::Cat)
+        {
+            if (!catVisited)
+            {
+                sounds.play(Sounds::Cat);
+                bruises = 0;
+                countdown = 60;
+                catVisited = true;
+            }
+            addToPath(100 * newLocation.x + newLocation.y);
+            location.x = newLocation.x;
+            location.y = newLocation.y;
             return cellType;
         }
         else
@@ -195,6 +208,7 @@ bool Player::bomb()
     countdown -= 3;
     score -= 2;
     bruises += 2;
+    if (!catVisited) grid.moveCat();
     return true;
 }
 
@@ -219,5 +233,6 @@ bool Player::light()
     countdown -= 2;
     score -= 1;
     bruises += 1;
+    if (!catVisited) grid.moveCat();
     return true;
 }

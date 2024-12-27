@@ -1,9 +1,9 @@
 #include "Grid.h"
+#include "Cat.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <string>
-
 using namespace std;
 
 
@@ -13,18 +13,130 @@ Grid::Grid() : step(nullptr)
         for (int c = 0; c < NumCols; c++)
             cell[r][c] = nullptr;
     int row, col;
-            Wall::Type walltype;
+    Wall::Type walltype;
 
-    for (int i = 0; i < 749; i++)
+    for (int i = 0; i < 747; i++)
     {
         row = rand() % 40;
         col = rand() % 40;
-        if ((row == 0 and col == 0) or  (row == 0 and col == 0)) continue;
+        if (row == 0 and col == 0) continue;
         if (cell[col][row]) continue;
         walltype = randomWall();
         if (walltype != Wall::None) cell[col][row] = new Wall(walltype, col, row);
     }
     generate_path();
+    // Position the cat:  Position is the upper-left corner of the (2x2) sprite
+    bool FoundLocationForCat = false;
+    while (!FoundLocationForCat)
+    {
+        row = rand() % 38 + 1;
+        col = rand() % 38 + 1;
+        if (!locationIsInThePath(col, row)) FoundLocationForCat = true;
+    }
+    if (cell[col][row])
+    {
+        delete cell[col][row];
+        cell[col][row] = nullptr;
+        cell[col][row] = new Wall(Wall::Cat, col, row);
+    }
+    if (cell[col+1][row])
+    {
+        delete cell[col+1][row];
+        cell[col+1][row] = nullptr;
+        cell[col+1][row] = new Wall(Wall::Cat, col, row);
+    }
+    if (cell[col][row+1])
+    {
+        delete cell[col][row+1];
+        cell[col][row+1] = nullptr;
+        cell[col][row+1] = new Wall(Wall::Cat, col, row);
+    }
+    if (cell[col+1][row+1])
+    {
+        delete cell[col+1][row+1];
+        cell[col+1][row+1] = nullptr;
+        cell[col+1][row+1] = new Wall(Wall::Cat, col, row);
+    }
+    cat = new Cat();
+    cat->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
+    if (cell[col+1][row-1])
+    {
+        delete cell[col+1][row-1];
+        cell[col+1][row-1] = nullptr;
+    }
+    if (cell[col-11][row+1])
+    {
+        delete cell[col-1][row+1];
+        cell[col-1][row+1] = nullptr;
+    }
+    if (cell[col+3][row+1])
+    {
+        delete cell[col+3][row+1];
+        cell[col+3][row+1] = nullptr;
+    }
+    if (cell[col+1][row+3])
+    {
+        delete cell[col+1][row+3];
+        cell[col+1][row+3] = nullptr;
+    }
+}
+
+void Grid::moveCat()
+{
+    int row, col;
+    bool FoundLocationForCat = false;
+    while (!FoundLocationForCat)
+    {
+        row = rand() % 38 + 1;
+        col = rand() % 38 + 1;
+        if (!locationIsInThePath(col, row)) FoundLocationForCat = true;
+    }
+    if (cell[col][row])
+    {
+        delete cell[col][row];
+        cell[col][row] = nullptr;
+        cell[col][row] = new Wall(Wall::Cat, col, row);
+    }
+    if (cell[col+1][row])
+    {
+        delete cell[col+1][row];
+        cell[col+1][row] = nullptr;
+        cell[col+1][row] = new Wall(Wall::Cat, col, row);
+    }
+    if (cell[col][row+1])
+    {
+        delete cell[col][row+1];
+        cell[col][row+1] = nullptr;
+        cell[col][row+1] = new Wall(Wall::Cat, col, row);
+    }
+    if (cell[col+1][row+1])
+    {
+        delete cell[col+1][row+1];
+        cell[col+1][row+1] = nullptr;
+        cell[col+1][row+1] = new Wall(Wall::Cat, col, row);
+    }
+    cat = new Cat();
+    cat->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
+    if (cell[col+1][row-1])
+    {
+        delete cell[col+1][row-1];
+        cell[col+1][row-1] = nullptr;
+    }
+    if (cell[col-11][row+1])
+    {
+        delete cell[col-1][row+1];
+        cell[col-1][row+1] = nullptr;
+    }
+    if (cell[col+3][row+1])
+    {
+        delete cell[col+3][row+1];
+        cell[col+3][row+1] = nullptr;
+    }
+    if (cell[col+1][row+3])
+    {
+        delete cell[col+1][row+3];
+        cell[col+1][row+3] = nullptr;
+    }
 }
 
 Wall::Type Grid::randomWall()
@@ -79,6 +191,7 @@ void Grid::draw(sf::RenderWindow& window)
             }
         }
     }
+    window.draw(*cat);
 }
 
 void Grid::generate_path()
@@ -155,8 +268,7 @@ void Grid::generate_path()
     std::vector<int>::iterator it = std::unique(path.begin(), path.end());
     path.resize(std::distance(path.begin(), it));
     step = new sf::CircleShape[path.size()];
-
-    for (unsigned i = 0; i < path.size(); i++)
+    for (size_t i = 0; i < path.size(); i++)
     {
         x = path[i] / 100;
         y = path[i] % 100;
@@ -191,6 +303,11 @@ void Grid::draw_path(sf::RenderWindow& window)
     {
         window.draw(step[i]);
     }
+}
+
+void Grid::drawCat(sf::RenderWindow& window)
+{
+    window.draw(*cat);
 }
 
 void Grid::update_path(int x, int y)

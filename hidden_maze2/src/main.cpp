@@ -28,7 +28,7 @@ std::string getName(sf::RenderWindow& window);
 int main()
 {
     srand(static_cast<unsigned>(time(0)));
-    sf::RenderWindow window(sf::VideoMode(GameSize.x, GameSize.y),"Hidden Maze Game 2.0",sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(GameSize.x, GameSize.y),"Hidden Maze Game 2.1",sf::Style::Close);
     window.setFramerateLimit(60);
     sf::Music start_music;
     start_music.openFromFile(StartSoundFile);
@@ -99,6 +99,8 @@ int main()
             if (game->getStatus() == Game::Loss|| game->getStatus() == Game::Win) break;
             game->draw_and_display();
         }
+        if (game->getPlayer()->getCountdown() && game->getSounds().getSound(Sounds::Tick).getStatus() == sf::SoundSource::Playing)
+            game->getSounds().getSound(Sounds::Tick).stop();
 
         if (game->getStatus() == Game::Loss)
         {
