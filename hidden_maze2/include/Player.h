@@ -14,6 +14,7 @@ class Player : public sf::RectangleShape
         Player(const std::string& name, Grid& grid, Sounds& sounds_, sf::RenderWindow& window);
         void draw(sf::RenderWindow& window);
         Wall::Type move(Direction);
+        std::string getName() const { return name; }
         int getBruises() const { return bruises; }
         int getScore() const { return score; }
         sf::Vector2i getLocation() const { return location; }
@@ -36,6 +37,7 @@ class Player : public sf::RectangleShape
         void setFlashed() { flashUsed = true; }
         Wall::Type processMove(const sf::Vector2i& newLocation);
         void addToPath(int cell);
+        bool catIsVisited() const { return catVisited; }
 
     private:
         std::string name;
@@ -52,6 +54,7 @@ class Player : public sf::RectangleShape
         bool lightUsed = false;
         bool jumpUsed = false;
         bool flashUsed = false;
+        bool catVisited = false;
         int maxRow;
         int maxCol;
         std::vector<int> path;

@@ -27,6 +27,7 @@ const std::string ArrowImageFile = ResourcePath + "arrow.jpg";
 const std::string ButtonImageFile = ResourcePath + "buttons.png";
 const std::string ContinueImageFile = ResourcePath + "continue.png";
 const std::string OpeningImageFile = ResourcePath + "opening_background.png";
+const std::string CatImageFile = ResourcePath + "cat.png";
 
 const std::string MusicStartFile = ResourcePath + "start.ogg";
 const std::string StartSoundFile = ResourcePath + "start_sound.ogg";
@@ -45,6 +46,7 @@ const std::string BombSoundFile = ResourcePath + "explosion.wav";
 const std::string FartSoundFile = ResourcePath + "fart.wav";
 const std::string LightSoundFile = ResourcePath + "light.wav";
 const std::string TickSoundFile = ResourcePath + "tick.wav";
+const std::string CatSoundFile = ResourcePath + "cat.wav";
 
 const std::string HowToPlayFile = ResourcePath + "howtoplay.txt";
 

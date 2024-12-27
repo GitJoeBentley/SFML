@@ -6,7 +6,7 @@
 class Wall : public sf::RectangleShape
 {
 public:
-    enum Type {None, Soft, Medium, Hard, Solid, Rubber};
+    enum Type {None, Soft, Medium, Hard, Solid, Rubber, Cat};
 
     Wall(Type type_, int col, int row);
     virtual ~Wall();

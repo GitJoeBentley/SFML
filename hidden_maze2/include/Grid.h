@@ -5,6 +5,7 @@
 #include <utility>
 #include "Constants.h"
 #include "Wall.h"
+#include "Cat.h"
 
 
 class Grid
@@ -17,6 +18,8 @@ class Grid
         void generate_path();
         void print_path() const;
         void draw_path(sf::RenderWindow& window);
+        void drawCat(sf::RenderWindow& window);
+        void moveCat();
         Wall*& getCell(int row, int col) { return cell[row][col]; }
         Wall& getCellRef(int row, int col) { return *(cell[row][col]); }
         //Grid::Contents getCellContents(int row, int col);
@@ -31,6 +34,7 @@ class Grid
         sf::CircleShape* step;
         std::vector<int> path;
         Wall* cell[NumCols][NumRows];
+        Cat* cat = nullptr;
 
         void update_path(int x, int y);
         Wall::Type randomWall();
