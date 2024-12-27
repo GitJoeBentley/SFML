@@ -1,1 +1,1 @@
-This is a new version of the Hidden maze game
+This is Version 2 of the Hidden maze game.  It contains new walls of varying densities and the "magic kitty".
