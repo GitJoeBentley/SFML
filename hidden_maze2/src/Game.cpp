@@ -200,9 +200,9 @@ bool Game::playAgain()
 
     sf::Event event;
     statusText.setFillColor(sf::Color::Green);
-
     while (window.isOpen())
     {
+        window.clear();
         while (window.pollEvent(event))
         {
             if      (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) return false;
@@ -305,6 +305,7 @@ bool Game::flash()
         while (window.isOpen())
         {
             elapsedTime = clock.getElapsedTime().asMilliseconds();
+            //cout << elapsedTime << endl;
             if (elapsedTime > 1000.0f) break;
             draw_and_display();
         }
@@ -313,13 +314,14 @@ bool Game::flash()
         {
             player->setFlashed();
             player->incrementBruises();
-            grid->AddARandomWall();
+            //vgrid->AddARandomWall();
             player->decrementCountdown(3);
             player->decrementScore();
             player->incrementBruises();
+            if (!player->catIsVisited()) grid->moveCat();
+
             bounce();
         }
-        if (!player->catIsVisited()) grid->moveCat();
         return true;
     }
     sounds.play(Sounds::Fart);

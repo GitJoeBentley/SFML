@@ -187,6 +187,7 @@ void Player::draw_path(sf::RenderWindow& window) const
 
 bool Player::bomb()
 {
+    Wall* wallPtr = nullptr;
     if (bombUsed)
     {
         sounds.play(Sounds::Fart);
@@ -195,12 +196,16 @@ bool Player::bomb()
 
     bombUsed = true;
     sounds.play(Sounds::Bomb);
+
     for (int x = location.x - 1; x <= location.x + 1; x++)
     {
         if (x < 0 || x >= NumRows) continue;
         for (int y = location.y - 1; y <= location.y + 1; y++)
         {
             if (y < 0 || y >= NumRows || (x == location.x && y == location.y)) continue;
+            wallPtr = grid.getCell(x,y);
+            if (wallPtr && wallPtr->getType() == Wall::Cat)
+                if (!catVisited) grid.moveCat();
             grid.clearCell(x,y);
             addToPath(100 * x + y);
         }
@@ -208,7 +213,7 @@ bool Player::bomb()
     countdown -= 3;
     score -= 2;
     bruises += 2;
-    if (!catVisited) grid.moveCat();
+
     return true;
 }
 

@@ -14,12 +14,13 @@
 #include "Sounds.h"
 #include "Message.h"
 #include "Fonts.h"
+#include "Button.h"
 using namespace std;
 
 std::string getHowToPlayText();
 char getKey();
 bool opening(sf::RenderWindow& window, HighScores*);
-bool buttonIsClicked(sf::Sprite& button, sf::Vector2f mousePosition);
+bool buttonIsClicked(sf::RectangleShape& button, sf::Vector2f mousePosition);
 void displayHighScores(sf::RenderWindow& window, HighScores* highscores);
 void howtoplay(sf::RenderWindow& window);
 std::string getName(sf::RenderWindow& window);
@@ -28,6 +29,7 @@ std::string getName(sf::RenderWindow& window);
 int main()
 {
     srand(static_cast<unsigned>(time(0)));
+    //srand(16);   // for debugging purposes
     sf::RenderWindow window(sf::VideoMode(GameSize.x, GameSize.y),"Hidden Maze Game 2.1",sf::Style::Close);
     window.setFramerateLimit(60);
     sf::Music start_music;
@@ -47,20 +49,24 @@ int main()
     bool playAgain = opening(window, &highScores);
     string name = "";
 
+    // Game Controller
+    sf::Joystick joystick;
+    float x, y; // joystick directions
+
+
     // Game Loop starts here ///////////////////////////
     while (playAgain)
     {
         if (name.length() == 0) name = getName(window);
 
         if (start_music.getStatus() == sf::SoundSource::Playing) start_music.stop();
-
         game = new Game(window, name);
         game -> flash();
 
         while (window.isOpen())
         {
-            // Check all the window's events that were triggered
-            // since the last iteration of the main loop.
+            x = joystick.getAxisPosition(0, sf::Joystick::X);
+            y = joystick.getAxisPosition(0, sf::Joystick::Y);
             while (game->getWindow().pollEvent(event))
             {
                 if (event.type == sf::Event::Closed) game->getWindow().close();
@@ -71,10 +77,10 @@ int main()
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))      game->bomb();     // bomb
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))      game->light();    // light
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))      game->jump();     // jump
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))     game->move(Player::Up);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))   game->move(Player::Down);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))   game->move(Player::Left);
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)    or y < -50.f) game->move(Player::Up);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)  or y > 50.f)  game->move(Player::Down);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)  or x < -50.f) game->move(Player::Left);
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) or x > 50.f)
                     game->move(Player::Right);
                 else break;
             }
@@ -135,11 +141,11 @@ int main()
 
 bool opening(sf::RenderWindow& window, HighScores* highscores)
 {
-    sf::Sprite button[4];
     sf::RectangleShape background(sf::Vector2f(GameSize.x, GameSize.y));
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile(OpeningImageFile);
     background.setTexture(&backgroundTexture);
+    long counter = 0;
 
     sf::RectangleShape buttonBox(sf::Vector2f(550.f, 700.0f));
     buttonBox.setFillColor(sf::Color::Black);
@@ -154,36 +160,42 @@ bool opening(sf::RenderWindow& window, HighScores* highscores)
 
     // Title
     sf::Text title("Joe's Hidden Maze Game", Fonts::Kristan);
-    title.setFillColor(sf::Color(250,150,200));
+    title.setFillColor(sf::Color(0xFA96C8ff));
     sf::FloatRect titleRect = title.getLocalBounds();
     title.setPosition(MidWindow.x - titleRect.width/2, tobb + 0.04f * buttonBox.getSize().y);
 
     // Load buttons
-    sf::Texture buttonsTexture;
-    buttonsTexture.loadFromFile(ButtonImageFile);
-    sf::Vector2f buttonSize= {200.0f,64.0};
-    sf::IntRect locationInTexture;
-
+    string buttonText[4] = {"PLAY", "HOW TO PLAY", "HIGH SCORES", "EXIT"};
+    sf::Color color[4] = {sf::Color(0x2cbb56ff),sf::Color(0xff7f27ff),sf::Color(0x00a2e8ff),sf::Color(0xed1c24ff)};
+    sf::Color hicolor[4] = {sf::Color(0x39f265ff),sf::Color(0xffc018ff),sf::Color(0x13d8e8ff),sf::Color(0xed7ab2ff)};
+    Button* but[4];
     for (int i = 0; i < 4; i++)
     {
-        button[i].setTexture(buttonsTexture);
-        locationInTexture.height = static_cast<int>(buttonSize.y);
-        locationInTexture.width = static_cast<int>(buttonSize.x);
-        locationInTexture.left = 0;
-        locationInTexture.top = i * buttonSize.y;
-        button[i].setTextureRect(locationInTexture);
-        button[i].setTexture(buttonsTexture);
-        float buttonXpos = MidWindow.x - buttonSize.x/2.0f;
-        float buttonYpos = tobb + 0.2f * (i + 0.8f) * buttonBox.getSize().y;
-
-        button[i].setPosition(sf::Vector2f(buttonXpos, buttonYpos));
+        but[i] = new Button(buttonText[i], color[i], hicolor[i], sf::Vector2f(MidWindow.x,  tobb + 20.0f + 0.2f * (i + 1.0f) * buttonBox.getSize().y));
     }
+
     sf::Event event;
     sf::Vector2f mousePos;
+    sf::Vector2i mousePosI;
+    sf::Mouse mouse;
+    sf::FloatRect butRect[4];
+    for (int i = 0; i < 4; i++)
+        butRect[i] = but[i]->getGlobalBounds();
     while (window.isOpen())
     {
+        mousePosI = mouse.getPosition(window);
+        mousePos.x = static_cast<float>(mousePosI.x);
+        mousePos.y = static_cast<float>(mousePosI.y);
+        for (int i = 0; i < 4; i++)
+        {
+            if (butRect[i].contains(mousePos)) but[i]->highlight();
+            else but[i]->normal();
+        }
+
         while (window.pollEvent(event))
         {
+
+
             switch (event.type)
             {
             case sf::Event::Closed:
@@ -193,7 +205,7 @@ bool opening(sf::RenderWindow& window, HighScores* highscores)
                 mousePos = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
                 for (int i = 0; i < 4; i++)
                 {
-                    if (buttonIsClicked(button[i], mousePos))
+                    if (buttonIsClicked(*(but[i]), mousePos))
                     {
                         switch (i)
                         {
@@ -222,9 +234,13 @@ bool opening(sf::RenderWindow& window, HighScores* highscores)
         window.clear();
         window.draw(background);
         window.draw(buttonBox);
-        window.draw(title);
+        counter++;
         for (int i = 0; i < 4; i++)
-            window.draw(button[i]);
+        {
+            if (i == 0 && counter % 100 < 5) continue;
+            but[i]->draw(window);
+        }
+        window.draw(title);
         window.display();
     }
     return false;
@@ -232,11 +248,7 @@ bool opening(sf::RenderWindow& window, HighScores* highscores)
 
 void displayHighScores(sf::RenderWindow& window, HighScores* highscores)
 {
-    sf::Sprite continueButton;
-    sf::Texture continueTexture;
-    continueTexture.loadFromFile(ContinueImageFile);
-    continueButton.setTexture(continueTexture);
-    continueButton.setPosition(sf::Vector2f(BottomWindow.x - 95.0f, BottomWindow.y));
+    Button continueButton("CONTINUE", sf::Color(0xfffd55ff), sf::Color(0xfeff89ff), sf::Vector2f(BottomWindow.x, BottomWindow.y));
 
     sf::RectangleShape background(sf::Vector2f(GameSize.x, GameSize.y));
     sf::Texture backgroundTexture;
@@ -254,9 +266,18 @@ void displayHighScores(sf::RenderWindow& window, HighScores* highscores)
     Message msg(sout.str(), Fonts::Courier, 16);
 
     sf::Event event;
+    sf::Mouse mouse;
     sf::Vector2f mousePos;
+    sf::Vector2i mousePosI;
+    sf::FloatRect butRect = continueButton.getGlobalBounds();
     while (window.isOpen())
     {
+        mousePosI = mouse.getPosition(window);
+        mousePos.x = static_cast<float>(mousePosI.x);
+        mousePos.y = static_cast<float>(mousePosI.y);
+        if (butRect.contains(mousePos)) continueButton.highlight();
+        else continueButton.normal();
+
         while (window.pollEvent(event))
         {
             switch (event.type)
@@ -275,7 +296,7 @@ void displayHighScores(sf::RenderWindow& window, HighScores* highscores)
         window.clear();
         window.draw(background);
         msg.draw(window);
-        window.draw(continueButton);
+        continueButton.draw(window);
         window.draw(title);
         window.display();
     }
@@ -283,11 +304,7 @@ void displayHighScores(sf::RenderWindow& window, HighScores* highscores)
 
 void howtoplay(sf::RenderWindow& window)
 {
-    sf::Sprite continueButton;
-    sf::Texture continueTexture;
-    continueTexture.loadFromFile(ContinueImageFile);
-    continueButton.setTexture(continueTexture);
-    continueButton.setPosition(sf::Vector2f(BottomWindow.x - 90.0f, BottomWindow.y));
+    Button continueButton("CONTINUE", sf::Color(0xfffd55ff), sf::Color(0xfeff89ff), sf::Vector2f(BottomWindow.x, BottomWindow.y));
 
     // Get How to play file
     const std::string text = getHowToPlayText();
@@ -298,9 +315,17 @@ void howtoplay(sf::RenderWindow& window)
     title.setPosition(sf::Vector2f(TopWindow.x - 170.0f, TopWindow.y));
     Message howtoplay(text, Fonts::Arial, 18);
     sf::Event event;
+    sf::Mouse mouse;
     sf::Vector2f mousePos;
+    sf::Vector2i mousePosI;
+    sf::FloatRect butRect = continueButton.getGlobalBounds();
     while (window.isOpen())
     {
+        mousePosI = mouse.getPosition(window);
+        mousePos.x = static_cast<float>(mousePosI.x);
+        mousePos.y = static_cast<float>(mousePosI.y);
+        if (butRect.contains(mousePos)) continueButton.highlight();
+        else continueButton.normal();
         while (window.pollEvent(event))
         {
             switch (event.type)
@@ -310,19 +335,14 @@ void howtoplay(sf::RenderWindow& window)
                 break;
             case sf::Event::MouseButtonPressed:
                 mousePos = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-                if (buttonIsClicked(continueButton, mousePos))
-                {
-                    return;
-                }
-
-                break;
+                if (buttonIsClicked(continueButton, mousePos))  return;
             default:
                 ;
             }
         }
         window.clear();
         howtoplay.draw(window);
-        window.draw(continueButton);
+        continueButton.draw(window);
         window.draw(title);
         window.display();
     }
@@ -480,8 +500,10 @@ char getKey()
     return ' ';
 }
 
-bool buttonIsClicked(sf::Sprite& button, sf::Vector2f mousePosition)
+bool buttonIsClicked(sf::RectangleShape& button, sf::Vector2f mousePosition)
 {
+
     sf::FloatRect rectangle = button.getGlobalBounds();
+    // sf::FloatRect rectangle = button.getGlobalBounds();
     return rectangle.contains(mousePosition);
 }

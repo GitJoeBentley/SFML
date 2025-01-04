@@ -26,59 +26,7 @@ Grid::Grid() : step(nullptr)
     }
     generate_path();
     // Position the cat:  Position is the upper-left corner of the (2x2) sprite
-    bool FoundLocationForCat = false;
-    while (!FoundLocationForCat)
-    {
-        row = rand() % 38 + 1;
-        col = rand() % 38 + 1;
-        if (!locationIsInThePath(col, row)) FoundLocationForCat = true;
-    }
-    if (cell[col][row])
-    {
-        delete cell[col][row];
-        cell[col][row] = nullptr;
-        cell[col][row] = new Wall(Wall::Cat, col, row);
-    }
-    if (cell[col+1][row])
-    {
-        delete cell[col+1][row];
-        cell[col+1][row] = nullptr;
-        cell[col+1][row] = new Wall(Wall::Cat, col, row);
-    }
-    if (cell[col][row+1])
-    {
-        delete cell[col][row+1];
-        cell[col][row+1] = nullptr;
-        cell[col][row+1] = new Wall(Wall::Cat, col, row);
-    }
-    if (cell[col+1][row+1])
-    {
-        delete cell[col+1][row+1];
-        cell[col+1][row+1] = nullptr;
-        cell[col+1][row+1] = new Wall(Wall::Cat, col, row);
-    }
-    cat = new Cat();
-    cat->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
-    if (cell[col+1][row-1])
-    {
-        delete cell[col+1][row-1];
-        cell[col+1][row-1] = nullptr;
-    }
-    if (cell[col-11][row+1])
-    {
-        delete cell[col-1][row+1];
-        cell[col-1][row+1] = nullptr;
-    }
-    if (cell[col+3][row+1])
-    {
-        delete cell[col+3][row+1];
-        cell[col+3][row+1] = nullptr;
-    }
-    if (cell[col+1][row+3])
-    {
-        delete cell[col+1][row+3];
-        cell[col+1][row+3] = nullptr;
-    }
+    moveCat();
 }
 
 void Grid::moveCat()
@@ -101,22 +49,23 @@ void Grid::moveCat()
     {
         delete cell[col+1][row];
         cell[col+1][row] = nullptr;
-        cell[col+1][row] = new Wall(Wall::Cat, col, row);
+        cell[col+1][row] = new Wall(Wall::Cat, col+1, row);
     }
     if (cell[col][row+1])
     {
         delete cell[col][row+1];
         cell[col][row+1] = nullptr;
-        cell[col][row+1] = new Wall(Wall::Cat, col, row);
+        cell[col][row+1] = new Wall(Wall::Cat, col, row+1);
     }
     if (cell[col+1][row+1])
     {
         delete cell[col+1][row+1];
         cell[col+1][row+1] = nullptr;
-        cell[col+1][row+1] = new Wall(Wall::Cat, col, row);
+        cell[col+1][row+1] = new Wall(Wall::Cat, col+1, row+1);
     }
     cat = new Cat();
     cat->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
+    /*
     if (cell[col+1][row-1])
     {
         delete cell[col+1][row-1];
@@ -137,6 +86,7 @@ void Grid::moveCat()
         delete cell[col+1][row+3];
         cell[col+1][row+3] = nullptr;
     }
+    */
 }
 
 Wall::Type Grid::randomWall()
