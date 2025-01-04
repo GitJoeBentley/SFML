@@ -23,8 +23,6 @@ public:
     sf::Color color() const;
     void updateColor();
 
-protected:
-
 private:
     Type type;
 };

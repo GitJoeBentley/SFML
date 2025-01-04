@@ -6,16 +6,15 @@
 #include "Constants.h"
 #include "Fonts.h"
 
-class Message
+class Message : public sf::RectangleShape
 {
 public:
     Message(const std::string& txt, sf::Font& font, unsigned int characterSize=30, sf::Vector2f pos = MidWindow, sf::Color color = sf::Color::Yellow);
     ~Message() = default;
     void draw(sf::RenderWindow& window);
 
-private:
+protected:
     sf::Text text;
-    sf::RectangleShape rectangle;
 };
 
 #endif // MESSAGE_H
