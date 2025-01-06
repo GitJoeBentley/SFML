@@ -7,6 +7,7 @@
 const float CellWidth = 20.0f;
 
 const sf::Vector2u GameSize(1000, 1000);
+const sf::Vector2f GameSizeF(1000, 1000);
 const sf::Vector2f MidWindow(GameSize.x / 2.0f, GameSize.y / 2.0f);
 const sf::Vector2f BottomWindow(GameSize.x / 2.0f, 8.5f * GameSize.y / 10.0f);
 const sf::Vector2f TopWindow(GameSize.x / 2.0f, 0.5f * GameSize.y / 10.0f);
