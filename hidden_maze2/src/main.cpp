@@ -114,7 +114,8 @@ int main()
             game->getSounds().play(Sounds::Loss);
             if (game->getPlayer()->getBruises() >= 50) txt = "      You lose\nToo many bruises";
             else txt = " You lose\nOut of time";
-            Message msg(txt, Fonts::Arial, 60);
+            game -> flash();
+            Message msg(txt, Fonts::Arial, 36, MidWindow, sf::Color::Red);
             msg.draw(window);
             window.display();
             sf::sleep(sf::Time(sf::seconds(4.0f)));
@@ -131,6 +132,7 @@ int main()
             highScores.WriteHighScoresFile();
         }
         game->draw_and_display();
+        game -> flash();
         playAgain = game->playAgain();
     }
     if (game) delete game;
@@ -141,7 +143,7 @@ int main()
 
 bool opening(sf::RenderWindow& window, HighScores* highscores)
 {
-    sf::RectangleShape background(sf::Vector2f(GameSize.x, GameSize.y));
+    sf::RectangleShape background(GameSizeF);
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile(OpeningImageFile);
     background.setTexture(&backgroundTexture);
@@ -250,7 +252,7 @@ void displayHighScores(sf::RenderWindow& window, HighScores* highscores)
 {
     Button continueButton("CONTINUE", sf::Color(0xfffd55ff), sf::Color(0xfeff89ff), sf::Vector2f(BottomWindow.x, BottomWindow.y));
 
-    sf::RectangleShape background(sf::Vector2f(GameSize.x, GameSize.y));
+    sf::RectangleShape background(GameSizeF);
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile(OpeningImageFile);
     background.setTexture(&backgroundTexture);
@@ -357,7 +359,7 @@ std::string getName(sf::RenderWindow& window)
     char input = ' ';
     std::string text = "\nPlease type your name and press Enter ===> ";
     sf::Text namePrompt(text, Fonts::Arial, 20);
-    sf::RectangleShape background(sf::Vector2f(GameSize.x, GameSize.y));
+    sf::RectangleShape background(GameSizeF);
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile(OpeningImageFile);
     background.setTexture(&backgroundTexture);

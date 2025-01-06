@@ -65,28 +65,6 @@ void Grid::moveCat()
     }
     cat = new Cat();
     cat->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
-    /*
-    if (cell[col+1][row-1])
-    {
-        delete cell[col+1][row-1];
-        cell[col+1][row-1] = nullptr;
-    }
-    if (cell[col-11][row+1])
-    {
-        delete cell[col-1][row+1];
-        cell[col-1][row+1] = nullptr;
-    }
-    if (cell[col+3][row+1])
-    {
-        delete cell[col+3][row+1];
-        cell[col+3][row+1] = nullptr;
-    }
-    if (cell[col+1][row+3])
-    {
-        delete cell[col+1][row+3];
-        cell[col+1][row+3] = nullptr;
-    }
-    */
 }
 
 Wall::Type Grid::randomWall()

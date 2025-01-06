@@ -90,7 +90,7 @@ Wall::Type Player::processMove(const sf::Vector2i& newLocation)
         }
         else
         {
-            sounds.play(Sounds::Wall,cellType * 15.0f);
+            sounds.play(Sounds::Wall,static_cast<int>(cellType) * 15.0f);
             bruises++;
             --(*ptrCell);
             ptrCell->updateColor();

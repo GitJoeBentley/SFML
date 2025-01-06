@@ -196,7 +196,7 @@ void Game::draw_and_display()
 
 bool Game::playAgain()
 {
-    Message playagain("Play again?  (Y/N)", Fonts::Arial, 48);
+    Message playagain("Play again?  (Y/N)", Fonts::Arial, 36);
 
     sf::Event event;
     statusText.setFillColor(sf::Color::Green);
