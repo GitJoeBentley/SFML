@@ -34,5 +34,5 @@ sf::Color Wall::color() const
 void Wall::updateColor()
 {
     int shade = static_cast<int>((4 - type) / 4.0f * 255);
-    setFillColor(sf::Color(shade, shade, shade));
+    if (shade >= 0) setFillColor(sf::Color(shade, shade, shade));
 }

@@ -137,6 +137,7 @@ void Game::bounce()
 
 void Game::move(Player::Direction direction)
 {
+    Wall::Type cellContents;
     if (status == Game::NotStarted) status = Game::Active;
     sf::Vector2i playerLoc = player->getLocation();
     if (playerLoc == sf::Vector2i(NumCols-1,NumRows-1) && direction == Player::Right)
@@ -144,7 +145,15 @@ void Game::move(Player::Direction direction)
         status = Game::Win;
         return;
     }
-    player-> move(direction);
+    cellContents = player-> move(direction);
+    if (cellContents == Wall::Cat && !(player->catIsVisited()))
+    {
+        cout << "Found the cat" << endl;
+        Message msg("You found the cat\nYour bruises are gone\nand the clock is reset", Fonts::Arial, 20);
+        msg.draw(window);
+        window.display();
+        sf::sleep(sf::Time(sf::seconds(3.0f)));
+    }
     if (player->getBruises() >= 50) status = Game::Loss;
     return;
 }
@@ -181,10 +190,12 @@ void Game::draw_and_display()
         grid->draw_path(window);
         grid->draw(window);
         grid->drawCat(window);
+        grid->drawPotion(window);
     }
     else border.setTexture(&borderTexture);
 
     if (player->catIsVisited()) grid->drawCat(window);
+    if (player->foundPotion()) grid->drawPotion(window);
 
     player->draw(window);
     if (getStatus() == Game::NotStarted && !displayMaze) start();

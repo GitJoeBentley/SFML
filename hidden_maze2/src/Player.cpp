@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Constants.h"
+#include "Message.h"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
@@ -56,6 +58,7 @@ Wall::Type Player::move(Direction direction)
 Wall::Type Player::processMove(const sf::Vector2i& newLocation)
 {
     Wall::Type cellType;
+    static int potionProtection = 0;
 
     Wall* ptrCell = grid.getCell(newLocation.x, newLocation.y);
     if (!ptrCell)
@@ -67,6 +70,7 @@ Wall::Type Player::processMove(const sf::Vector2i& newLocation)
     else
     {
         cellType = ptrCell->getType();
+        // debugging: cout << "cellType=" << (int) cellType << endl;
         if (cellType == Wall::Rubber)
         {
             sounds.play(Sounds::Bounce);
@@ -76,13 +80,37 @@ Wall::Type Player::processMove(const sf::Vector2i& newLocation)
         }
         if (cellType == Wall::Cat)
         {
+            //cerr << "Found the cat\n";
             if (!catVisited)
             {
                 sounds.play(Sounds::Cat);
-                bruises = 0;
+                Message msg("You found the cat\nThe clock is reset", Fonts::Arial, 36, MidWindow, sf::Color::Green);
+                msg.draw(window);
+                window.display();
+                sf::sleep(sf::Time(sf::seconds(2.0f)));
                 countdown = 60;
                 catVisited = true;
             }
+
+            addToPath(100 * newLocation.x + newLocation.y);
+            location.x = newLocation.x;
+            location.y = newLocation.y;
+            return cellType;
+        }
+        else if (cellType == Wall::Potion)
+        {
+            //cerr << "Found the potion\n";
+            if (!potionFound)
+            {
+                sounds.play(Sounds::Potion);
+                Message msg("     You found the magic potion    \nYou will not feel the next 10 bruises", Fonts::Arial, 36, MidWindow, sf::Color::Green);
+                potionProtection = 10;
+                msg.draw(window);
+                window.display();
+                sf::sleep(sf::Time(sf::seconds(2.0f)));
+                potionFound = true;
+            }
+
             addToPath(100 * newLocation.x + newLocation.y);
             location.x = newLocation.x;
             location.y = newLocation.y;
@@ -91,7 +119,8 @@ Wall::Type Player::processMove(const sf::Vector2i& newLocation)
         else
         {
             sounds.play(Sounds::Wall,static_cast<int>(cellType) * 15.0f);
-            bruises++;
+            if (potionProtection) potionProtection--;
+            else bruises++;
             --(*ptrCell);
             ptrCell->updateColor();
             if (ptrCell->getType() == Wall::None)

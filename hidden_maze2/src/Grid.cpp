@@ -27,6 +27,19 @@ Grid::Grid() : step(nullptr)
     generate_path();
     // Position the cat:  Position is the upper-left corner of the (2x2) sprite
     moveCat();
+    movePotion();
+    // Print the grid for debugging purposes
+#if 0
+    for (int r = 0; r < NumRows; r++)
+    {
+        for (int c = 0; c < NumCols; c++)
+        {
+            if (cell[c][r]) cout << (int)(cell[c][r]->getType());
+            else cout << '0';
+        }
+        cout << endl;
+    }
+#endif
 }
 
 void Grid::moveCat()
@@ -39,32 +52,38 @@ void Grid::moveCat()
         col = rand() % 38 + 1;
         if (!locationIsInThePath(col, row)) FoundLocationForCat = true;
     }
-    if (cell[col][row])
-    {
-        delete cell[col][row];
-        cell[col][row] = nullptr;
-        cell[col][row] = new Wall(Wall::Cat, col, row);
-    }
-    if (cell[col+1][row])
-    {
-        delete cell[col+1][row];
-        cell[col+1][row] = nullptr;
-        cell[col+1][row] = new Wall(Wall::Cat, col+1, row);
-    }
-    if (cell[col][row+1])
-    {
-        delete cell[col][row+1];
-        cell[col][row+1] = nullptr;
-        cell[col][row+1] = new Wall(Wall::Cat, col, row+1);
-    }
-    if (cell[col+1][row+1])
-    {
-        delete cell[col+1][row+1];
-        cell[col+1][row+1] = nullptr;
-        cell[col+1][row+1] = new Wall(Wall::Cat, col+1, row+1);
-    }
     cat = new Cat();
     cat->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
+    for (int r = row; r <= row+1; r++)
+    {
+        for (int c = col; c <= col + 1; c++)
+        {
+            if (cell[c][r]) delete cell[c][r];
+            cell[c][r] = new Wall(Wall::Cat, c, r);
+        }
+    }
+}
+
+void Grid::movePotion()
+{
+    int row, col;
+    bool FoundLocationForPotion = false;
+    while (!FoundLocationForPotion)
+    {
+        row = rand() % 38 + 1;
+        col = rand() % 38 + 1;
+        if (!locationIsInThePath(col, row)) FoundLocationForPotion = true;
+    }
+    potion = new Potion();
+    potion->setPosition(sf::Vector2f(WindowHorizontalOffset + col * CellWidth, WindowVerticalOffset + row * CellWidth));
+    for (int r = row; r <= row+1; r++)
+    {
+        for (int c = col; c <= col + 1; c++)
+        {
+            if (cell[c][r]) delete cell[c][r];
+            cell[c][r] = new Wall(Wall::Potion, c, r);
+        }
+    }
 }
 
 Wall::Type Grid::randomWall()
@@ -120,6 +139,7 @@ void Grid::draw(sf::RenderWindow& window)
         }
     }
     window.draw(*cat);
+    window.draw(*potion);
 }
 
 void Grid::generate_path()
@@ -236,6 +256,11 @@ void Grid::draw_path(sf::RenderWindow& window)
 void Grid::drawCat(sf::RenderWindow& window)
 {
     window.draw(*cat);
+}
+
+void Grid::drawPotion(sf::RenderWindow& window)
+{
+    window.draw(*potion);
 }
 
 void Grid::update_path(int x, int y)

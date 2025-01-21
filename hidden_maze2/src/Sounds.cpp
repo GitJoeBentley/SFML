@@ -5,7 +5,7 @@ using namespace std;
 Sounds::Sounds() : buffer(new sf::SoundBuffer[NumberOfSounds]), sound(new sf::Sound[NumberOfSounds])
 {
     string soundfile[NumberOfSounds] = {StepSoundFile, RubberSoundFile, HitWallSoundFile, LightSoundFile,
-                                        BombSoundFile, FartSoundFile, WinSoundFile, LossSoundFile, TickSoundFile, CatSoundFile
+                                        BombSoundFile, FartSoundFile, WinSoundFile, LossSoundFile, TickSoundFile, CatSoundFile, PotionSoundFile
                                        };
     for (int i = 0; i < NumberOfSounds; i++)
     {

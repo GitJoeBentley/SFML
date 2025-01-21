@@ -30,7 +30,11 @@ int main()
 {
     srand(static_cast<unsigned>(time(0)));
     //srand(16);   // for debugging purposes
-    sf::RenderWindow window(sf::VideoMode(GameSize.x, GameSize.y),"Hidden Maze Game 2.1",sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(GameSize.x, GameSize.y),"Hidden Maze Game 2.2",sf::Style::Close);
+    //sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
+    //sf::RenderWindow window(desktop,"Hidden Maze Game 2.2",sf::Style::None);
+    //auto rsize = window.getSize();
+    //cout << rsize.x << ' ' << rsize.y << endl;
     window.setFramerateLimit(60);
     sf::Music start_music;
     start_music.openFromFile(StartSoundFile);
@@ -111,14 +115,14 @@ int main()
         if (game->getStatus() == Game::Loss)
         {
             string txt;
-            game->getSounds().play(Sounds::Loss);
+            game->getSounds().play(Sounds::Loss, 100.0f);
             if (game->getPlayer()->getBruises() >= 50) txt = "      You lose\nToo many bruises";
             else txt = " You lose\nOut of time";
             game -> flash();
             Message msg(txt, Fonts::Arial, 36, MidWindow, sf::Color::Red);
             msg.draw(window);
             window.display();
-            sf::sleep(sf::Time(sf::seconds(4.0f)));
+            sf::sleep(sf::Time(sf::seconds(5.0f)));
         }
 
         if (game->getStatus() == Game::Win)
