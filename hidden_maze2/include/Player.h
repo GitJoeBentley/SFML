@@ -38,6 +38,7 @@ class Player : public sf::RectangleShape
         Wall::Type processMove(const sf::Vector2i& newLocation);
         void addToPath(int cell);
         bool catIsVisited() const { return catVisited; }
+        bool foundPotion() const { return potionFound; }
 
     private:
         std::string name;
@@ -55,6 +56,7 @@ class Player : public sf::RectangleShape
         bool jumpUsed = false;
         bool flashUsed = false;
         bool catVisited = false;
+        bool potionFound = false;
         int maxRow;
         int maxCol;
         std::vector<int> path;

@@ -6,7 +6,7 @@ class Cat : public sf::Sprite
 {
     public:
         Cat();
-        ~Cat();
+        ~Cat() = default;
 
     protected:
 

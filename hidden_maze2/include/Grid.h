@@ -6,6 +6,7 @@
 #include "Constants.h"
 #include "Wall.h"
 #include "Cat.h"
+#include "Potion.h"
 
 
 class Grid
@@ -19,7 +20,10 @@ class Grid
         void print_path() const;
         void draw_path(sf::RenderWindow& window);
         void drawCat(sf::RenderWindow& window);
+        void drawPotion(sf::RenderWindow& window);
         void moveCat();
+        void movePotion();
+
         Wall*& getCell(int row, int col) { return cell[row][col]; }
         Wall& getCellRef(int row, int col) { return *(cell[row][col]); }
         //Grid::Contents getCellContents(int row, int col);
@@ -35,6 +39,7 @@ class Grid
         std::vector<int> path;
         Wall* cell[NumCols][NumRows];
         Cat* cat = nullptr;
+        Potion* potion = nullptr;
 
         void update_path(int x, int y);
         Wall::Type randomWall();
