@@ -10,8 +10,9 @@ Medium  (Medium gray) will break if you hit them 2 times
 Soft    (Light gray)  will break if you hit them once
 Rubber  (Magenta)     no bruise, but you will be bounced to a random location
 
-You may encounter the "Magic Kitty".  He will reset your bruises to 0 and reset the time clock to 60
-seconds.  If you use a Flash, a Bomb, or a Light, you will scare the kitty and he will move.
+You may encounter the "Magic Kitty" or the "Secret Potion".  The "Kitty" will reset the time clock to
+60 seconds.  The "Potion" will protect from the next 10 bruises.  If you use a Flash, a Bomb, or a 
+Light, you will scare the kitty and he will move.
 
 You will lose the game if you take more than 60 seconds to traverse the maze or if you receive 50
 bruises.  Points are awarded as you progress through the maze.
