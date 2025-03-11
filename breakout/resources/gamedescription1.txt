@@ -1,0 +1,6 @@
+BASIC GAME
+
+This is a competitive game.  The ball will move faster, the paddle is smaller, and 
+there are move tiles to hit.  Your goal is to remove all of the times.
+
+Good luck
