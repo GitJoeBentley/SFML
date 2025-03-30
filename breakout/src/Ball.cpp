@@ -2,13 +2,14 @@
 #include "Ball.h"
 #include <cmath>
 #include <iostream>
+using namespace std;
 
 Ball::Ball(float ballradius, float ballspeed, Direction dir, float ang)
     : sf::CircleShape(ballradius), speed(ballspeed), direction(dir), angle(ang)
 {
-    setFillColor(sf::Color::Yellow);
-    setOrigin(getLocalBounds().width/2.0f,getLocalBounds().height / 2.0f);
-    angle = static_cast<float>(rand()%90-45);
+    setFillColor(Yellow);
+    sf::FloatRect rect = getLocalBounds();
+    setOrigin(rect.left + ballradius, rect.top + ballradius);
     moveToStartPosition();
 }
 float Ball::getAngle() const
@@ -34,48 +35,57 @@ void Ball::setAngle( float ang)
 void Ball::moveToStartPosition()
 {
     setPosition(BallStartPosition);
-    angle = static_cast<float>(rand()%90-45);
+    direction = Direction::Up;
+    if (angle != 45) angle = static_cast<float>(rand()%90-45);
 }
 
 bool Ball::hitTheWall()
 {
     // Hit the top wall
-    if (topOfBall() <= GameBorderWidth)
+    if (top() <= GameBorderWidth)
     {
         direction = Direction::Down;
         return true;
     }
     // Hit the right wall
-    if (rightSideOfBall() >= GameWindowSize.x + GameBorderWidth)
+    if (right() >= GameWindowSize.x + GameBorderWidth)
     {
+        // move the ball away from the wall
+        sf::Vector2f ballPos = getPosition();
+        ballPos.x -= 3.0f;
+        setPosition(ballPos);
         angle = -angle;
         return true;
     }
     // Hit the left wall
-    if (leftSideOfBall() <= GameBorderWidth)
+    if (left() <= GameBorderWidth)
     {
+        // move the ball away from the wall
+        sf::Vector2f ballPos = getPosition();
+        ballPos.x += 3.0f;
+        setPosition(ballPos);
         angle = -angle;
         return true;
     }
     return false;
 }
 
-float Ball::bottomOfBall() const
+float Ball::bottom() const
 {
     return getPosition().y + getRadius();
 }
 
-float Ball::topOfBall() const
+float Ball::top() const
 {
     return getPosition().y - getRadius();
 }
 
-float Ball::rightSideOfBall() const
+float Ball::right() const
 {
     return getPosition().x + getRadius();
 }
 
-float Ball::leftSideOfBall() const
+float Ball::left() const
 {
     return getPosition().x - getRadius();
 }
@@ -93,4 +103,6 @@ void Ball::update(sf::Time dt)
     {
         setPosition(sf::Vector2f(getPosition().x + speed * dt.asSeconds() * std::sin(RPD*angle), getPosition().y + speed * dt.asSeconds() * std::cos(RPD*angle)));
     }
+    //cout << "Angle = " << angle << endl;
 }
+

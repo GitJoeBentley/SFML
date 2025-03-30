@@ -75,9 +75,6 @@ void HighScores::updateHighScores(const Score& obj)
 bool HighScores::eligible(int score)
 {
     //Score is eligible for high scores if less than 10 scores on the list or score is  the lowest score on the list
-    //std::cout << "*highscores.cbegin() = " << *(highScores.cbegin()) << std::endl;
-    //std::cout << "*highscores.crbegin() = " << *(highScores.crbegin()) << std::endl;
-    //std::cout << "highscores.crbegin()->getScore() = " << highScores.crbegin()->getScore() << std::endl;
     if (highScores.size() < 10) return true;
     if ( score > highScores.crbegin()->getScore()) return true;
     return false;
@@ -108,7 +105,7 @@ std::ostream& operator<<(std::ostream& out, const HighScores& scores)
         out << "No high scores recorded" << std::endl;
     else
     {
-        out << "\n   ********* High Scores *********" << std::endl << std::endl;
+        out << "\n\n   ********* High Scores *********" << std::endl << std::endl;
         out << "     Name          Score      Date" << std::endl;
         auto count = 1;
         for (auto it = scores.highScores.cbegin(); it != scores.highScores.cend(); ++it, ++count )

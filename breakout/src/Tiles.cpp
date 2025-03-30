@@ -34,12 +34,6 @@ Tiles::~Tiles()
     delete [] array;
     array = nullptr;
 }
-/*
-const Tile& Tiles::getTile(unsigned row, unsigned col) const
-{
-    return *(array[row][col]);
-}
-*/
 
 Tile* Tiles::getTile(unsigned row, unsigned col) const
 {
@@ -52,12 +46,6 @@ void Tiles::removeTile(unsigned row, unsigned col)
     array[row][col] = nullptr;
 }
 
-/*
-float Tiles::getBottomEdge()
-{
-    return TopEdge + numRows * (getTile(1,1)->getTileHeight() + 2.0f);
-}
-*/
 int Tiles::getNumRows() const
 {
     return numRows;

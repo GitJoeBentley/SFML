@@ -1,6 +1,8 @@
 #include "EasyGame.h"
 
-EasyGame::EasyGame(sf::RenderWindow& wnd): Game(wnd, "Easy Game", 5, 400.0f)
+// TODO (joefo#1#): ball speed is initialized in 2 places
+
+EasyGame::EasyGame(sf::RenderWindow& wnd): Game(wnd, 0)
 {
     setup();
 }
@@ -9,7 +11,7 @@ void EasyGame::setup()
 {
     int tileRows = 6;
     int tileCols = 8;
-    ball = new Ball(10.0f, 500.f);  // radius = 10, speed =
+    ball[0] = new Ball(10.0f);  // radius = 10, speed = 500
     float tileWidth = 72.0f;
     tiles = new Tiles(tileRows, tileCols, tileWidth, 24.0f, tileWidth);      // 6 rows, 8 columns, tile size 72x24
     numTiles = tileRows * tileCols;
