@@ -1,0 +1,7 @@
+Crazy Ball
+
+In this game the ball changes speed, changes color, 
+reverses direction, and doesn't always go straight.
+You'll have to react quickly.
+
+Good luck

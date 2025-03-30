@@ -1,0 +1,14 @@
+Random Tiles
+
+In this game, tile colors have different values and exhibit 
+different behaviors when you hit one.
+
+Red    (1 point)  Speeds up the ball by 10%
+Orange (2 points) Slows the ball down by 10%
+Yellow (3 points) Paddle size is increased by 10%
+Green  (4 points) Paddle size is decreased by 10%
+Blue   (5 points) Ball blanks out intermittently
+Indigo (6 points) Ball jumps to the left or right
+Violet (7 points) Ball bounce is unpredictable and ball speeds up
+
+Good luck
