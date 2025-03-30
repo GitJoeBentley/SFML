@@ -6,8 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include "Ball.h"
 
-// TODO (Joe#1#): Remove tile border ...
-//
 extern const float WallWidth;
 
 
@@ -21,12 +19,14 @@ public:
     void stop();
     void move(Direction dir, float distance);
     void moveToStartPosition();
-    bool hitTheBall(Ball* ptrBall);
-    //sf::Vector2f size() const;
+    float topOfPaddle() const;
     void update(sf::Time dt);
+    float leftSide() const;
+    float rightSide() const;
+    void setWidth(float width) { setSize(sf::Vector2f(width, getSize().y)); }
+    float getWidth() const { return getSize().x; }
 
 private:
-    //sf::Texture texture;
     Direction direction;
 };
 
