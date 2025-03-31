@@ -12,6 +12,12 @@ Ball::Ball(float ballradius, float ballspeed, Direction dir, float ang)
     setOrigin(rect.left + ballradius, rect.top + ballradius);
     moveToStartPosition();
 }
+
+bool Ball::getActive() const
+{
+    return active;
+}
+
 float Ball::getAngle() const
 {
     return angle;
@@ -32,11 +38,55 @@ void Ball::setAngle( float ang)
     angle = ang;
 }
 
+float Ball::getSpeed() const
+{
+    return speed;
+}
+
+
 void Ball::moveToStartPosition()
 {
     setPosition(BallStartPosition);
     direction = Direction::Up;
     if (angle != 45) angle = static_cast<float>(rand()%90-45);
+}
+
+void Ball::moveDown(float distance)
+{
+    sf::Vector2f pos = getPosition();
+    pos.y += distance;
+    setPosition(pos);
+}
+
+void Ball::moveUp(float distance)
+{
+    sf::Vector2f pos = getPosition();
+    pos.y -= distance;
+    setPosition(pos);
+}
+
+void Ball::moveLeft(float distance)
+{
+    sf::Vector2f pos = getPosition();
+    pos.x -= distance;
+    setPosition(pos);
+}
+
+void Ball::moveRight(float distance)
+{
+    sf::Vector2f pos = getPosition();
+    pos.x += distance;
+    setPosition(pos);
+}
+
+void Ball::setSpeed( float speed_)
+{
+    speed = speed_;
+}
+
+void Ball::setActive(bool activeStatus)
+{
+    active = activeStatus;
 }
 
 bool Ball::hitTheWall()

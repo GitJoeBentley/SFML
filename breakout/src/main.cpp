@@ -343,7 +343,7 @@ int main ()
             hasAHighScore = true;
             if (game->getScore() > game->getHighScores()->getHightestScore())
                 statement = "             Congratulations!!!\n    You have the highest score!!!";
-            else statement = "            Congratulations!!!\n    You made the leader board    ";
+            else statement = "             Congratulations!!!\n     You made the leader board  ";
         }
         else
         {

@@ -12,6 +12,16 @@ Paddle::Paddle(const float& width)
     moveToStartPosition();
 }
 
+float Paddle::getWidth() const
+{
+    return getSize().x;
+}
+
+void Paddle::setWidth(float width)
+{
+    setSize(sf::Vector2f(width, getSize().y));
+}
+
 void Paddle::moveToStartPosition()
 {
     setPosition(PaddleStartPosition);
@@ -27,19 +37,19 @@ void Paddle::stop()
     direction = Stopped;
 }
 
-float Paddle::leftSide() const
+float Paddle::left() const
 {
     sf::Rect rect = getGlobalBounds();
     return rect.left;
 }
 
-float Paddle::rightSide() const
+float Paddle::right() const
 {
     sf::Rect rect = getGlobalBounds();
     return rect.left + rect.width;
 }
 
-float Paddle::topOfPaddle() const
+float Paddle::top() const
 {
     return getPosition().y - getSize().y;
 }
@@ -62,10 +72,12 @@ void Paddle::update(sf::Time dt)
 void Paddle::move(Direction dir, float distance)
 {
     sf::Vector2f newPosition(getPosition());
-    if (dir == Right) {
+    if (dir == Right)
+    {
         newPosition.x += distance;
     }
-    if (dir == Left) {
+    if (dir == Left)
+    {
         newPosition.x -= distance;
     }
     setPosition(newPosition);
