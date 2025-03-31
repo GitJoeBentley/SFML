@@ -19,12 +19,13 @@ public:
     void stop();
     void move(Direction dir, float distance);
     void moveToStartPosition();
-    float topOfPaddle() const;
+
+    float top() const;
     void update(sf::Time dt);
-    float leftSide() const;
-    float rightSide() const;
-    void setWidth(float width) { setSize(sf::Vector2f(width, getSize().y)); }
-    float getWidth() const { return getSize().x; }
+    float left() const;
+    float right() const;
+    void setWidth(float width);
+    float getWidth() const;
 
 private:
     Direction direction;
