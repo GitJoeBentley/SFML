@@ -1,13 +1,11 @@
 #include <cmath>
 #include <iostream>
 #include "TwoBalls.h"
-#include "Game.h"
 
 TwoBalls::TwoBalls(sf::RenderWindow& wnd) : Game(wnd, 7)
 {
     setup();
 }
-
 
 void TwoBalls::setup()
 {

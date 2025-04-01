@@ -84,6 +84,11 @@ void Ball::setSpeed( float speed_)
     speed = speed_;
 }
 
+void Ball::speedUp (float pctIncrease)
+{
+    speed = speed * (1.f + pctIncrease/100.f);
+}
+
 void Ball::setActive(bool activeStatus)
 {
     active = activeStatus;

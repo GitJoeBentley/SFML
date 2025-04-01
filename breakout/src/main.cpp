@@ -25,6 +25,7 @@
 #include "Rainbow.h"
 #include "RandomTiles.h"
 #include "TwoBalls.h"
+#include "FallingTiles.h"
 #include "Button.h"
 #include "ButtonBox.h"
 #include "Message.h"
@@ -83,6 +84,7 @@ int main ()
     CrazyBall* crazyBallGame = nullptr;
     TwoBalls* twoBalls = nullptr;
     Crusher* crusher = nullptr;
+    FallingTiles* fallingTiles = nullptr;
 
     while (gameSelection != GameSelection::Exit)
     {
@@ -128,6 +130,10 @@ int main ()
         case 7:
             game = new TwoBalls(window);
             twoBalls = dynamic_cast<TwoBalls*>(game);
+            break;
+        case 8:
+            game = new FallingTiles(window);
+            fallingTiles = dynamic_cast<FallingTiles*>(game);
             break;
         default:
             ;
@@ -204,6 +210,26 @@ int main ()
             // Start of Active Game loop
             if (game->getStatus() == Game::GameStatus::Active)
             {
+                if (gameSelected == 8)
+                {
+                    if (rand() % 32767 == 0)
+                    {
+                        fallingTiles->findTileToFall();
+                    }
+                    if (rand() % 1200 == 1)
+                    {
+                        fallingTiles->fall();
+                    }
+                    if (fallingTiles->tileHitsPaddle(game->getPaddle()))
+                    {
+                        game->setStatus(Game::GameStatus::TileHitsPaddle);
+                        break;
+                    }
+                    if (fallingTiles->tileGetsPassedThePaddle(game->getPaddle()))
+                    {
+                        game->incrementScore(-10);
+                    }
+                }
                 if (gameSelected == 3)
                 {
                     crazyBallGame->doCrazy();
@@ -357,6 +383,9 @@ int main ()
                 break;
             case Game::GameStatus::OutOfBalls:
                 statement = "      Out of Balls\n      You Lose";
+                break;
+            case Game::GameStatus::TileHitsPaddle:
+                statement = "A falling tile hit the paddle\n         You Lose";
                 break;
             case Game::GameStatus::Win:
                 statement = "\n     You win!!!!!!!!!!!!\n";

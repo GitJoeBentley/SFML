@@ -10,7 +10,7 @@ Tiles::Tiles(int rows, int cols, float width, float height, float offset) : numR
         array[row] = new Tile*[numCols];
         for (int col = 0; col < numCols; col++)
         {
-            array[row][col] = new Tile(width, height);
+            array[row][col] = new Tile(row, col, width, height);
             location = sf::Vector2f(GameBorderWidth + offset + width / 2 + col * width, TopEdge + GameBorderWidth + row * height);
             array[row][col]->setLocation(location);
         }
@@ -50,6 +50,7 @@ int Tiles::getNumRows() const
 {
     return numRows;
 }
+
 int Tiles::getNumCols() const
 {
     return numCols;

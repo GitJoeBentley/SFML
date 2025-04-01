@@ -9,6 +9,7 @@ using namespace std;
 #include "Rainbow.h"
 #include "Crusher.h"
 #include "TwoBalls.h"
+#include "FallingTiles.h"
 
 Game::Game(sf::RenderWindow& wnd, int number, int balls, int time_remaining)
     : window(wnd), gameNumber(number), numBalls(balls), timeRemaining(time_remaining),
@@ -221,8 +222,6 @@ int Game::hitATile(int ballNo)
         else ball[ballNo]->setFillColor(Yellow);
     }
     bool hit = false;
-    // If the ball is below mid-window return -1;
-    if (ball[ballNo]->top() > getCenterOfGameWindow().y) return -1;
 
     Tile* tilePtr = nullptr;
     float angle;
@@ -290,6 +289,19 @@ int Game::hitATile(int ballNo)
                 else if (gameNumber == 7 && ballNo == 1 and ball2Status == Ball2Status::Inactive)  // Two Balls
                 {
                     return -1;
+                }
+                else if (gameNumber == 8)
+                {
+                    FallingTiles* ptrFT = dynamic_cast<FallingTiles*>(this);
+                    auto it = ptrFT->findTile(tilePtr);
+                    if (it != ptrFT->getFillingTiles().end())
+                    {
+                        ptrFT->getFillingTiles().erase(it);
+                        tileValue = 10;
+                        // Speed the ball up
+                        ball[0]->speedUp();     // 5%
+                    }
+                    else tileValue = 1;
                 }
                 else tileValue = 1;
                 tiles->removeTile(row, col);
