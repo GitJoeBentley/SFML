@@ -13,7 +13,7 @@
 class Game
 {
 public:
-    enum class GameStatus {NotStarted, Active, Paused, Win, OutOfTime, OutOfBalls, GameOver, Quit};
+    enum class GameStatus {NotStarted, Active, Paused, Win, OutOfTime, OutOfBalls, TileHitsPaddle, GameOver, Quit};
     enum class SideOfTile {None, Top, Bottom, Left, Right};
     enum class Ball2Status { Inactive, Active};
 

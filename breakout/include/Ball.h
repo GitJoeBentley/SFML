@@ -13,12 +13,21 @@ class Ball : public sf::CircleShape
 public:
     enum class Direction : int {Up, Down};
     Ball(float ballradius, float ballspeed = 500.0f, Direction dir = Direction::Up, float ang = static_cast<float>(rand()%90-45));
+
+    // getters
     float getAngle() const;
     Direction getDirection() const;
-    void setDirection(Direction dir);
-    void setAngle( float ang);
     float getSpeed() const;
-    void setSpeed( float speed_);
+    bool getActive() const;
+    float bottom() const;
+    float top() const;
+    float right() const;
+    float left() const;
+
+    void setDirection(Direction dir);
+    void setAngle(float ang);
+    void setSpeed(float speed_);
+    void speedUp (float pctIncrease = 5.0f);
     void move();
     void moveToStartPosition();
     bool hitTheWall();
@@ -29,11 +38,6 @@ public:
     void moveLeft(float distance = 1.0f);
     void moveRight(float distance = 1.0f);
     void setActive(bool activeStatus = true);
-    bool getActive() const;
-    float bottom() const;
-    float top() const;
-    float right() const;
-    float left() const;
 
 private:
     float speed;
