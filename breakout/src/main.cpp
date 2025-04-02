@@ -51,7 +51,7 @@ int main ()
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Joe's Breakout Game", sf::Style::Close);
 
-    Game* game;
+    Game* game = nullptr;
     GameSelection gameSelection = GameSelection::New;
 
     //GAME CLOCK & TIMER
@@ -67,7 +67,7 @@ int main ()
     sf::FloatRect textRect = Title->getLocalBounds();
     Title->setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     // Note: Title x-position adjusted (72.0f) for difference in RenderWindow size
-    Title->setPosition(sf::Vector2f(RenderWindowSize.x/2.0f + 72.0f, 0.05 * RenderWindowSize.y));
+    Title->setPosition(sf::Vector2f(RenderWindowSize.x/2.0f + 72.0f, 0.05f * RenderWindowSize.y));
 
     sf::Text message("", font);
     sf::Vector2f messagePos;
@@ -89,7 +89,7 @@ int main ()
     while (gameSelection != GameSelection::Exit)
     {
         message.setFillColor(sf::Color(10,220,250));
-        message.setCharacterSize(24.0f);
+        message.setCharacterSize(24);
         message.setStyle(sf::Text::Bold);
         drawCenteredText(message, window);
 
@@ -101,7 +101,7 @@ int main ()
         switch (gameSelected)
         {
         case -1:
-            game->setStatus(Game::GameStatus::GameOver);
+            game->setStatus(Game::GameStatus::Quit);
             window.close();
             break;
         case 0:
@@ -139,7 +139,7 @@ int main ()
             ;
         }
 
-        message.setPosition(game->getCenterOfGameWindow());
+        if (game) message.setPosition(game->getCenterOfGameWindow());
         game->drawHighScores();
 
         //////////// The GAME loop
@@ -456,7 +456,7 @@ int start(sf::RenderWindow& window, sf::Font& font)
             {
             case sf::Event::Closed:
                 window.close();
-                return -1;
+                exit(0);
             case sf::Event::MouseButtonPressed:
 
                 for (size_t i = 0; i < numButtons; i++)

@@ -9,7 +9,6 @@
 #include <ctime>
 #include "constants.h"
 
-
 Score::Score(const char* n, int sc, time_t t)
     : score(sc), date(t)
 {
@@ -82,6 +81,7 @@ bool HighScores::eligible(int score)
 
 int HighScores::getHightestScore() const
 {
+    if (highScores.size() == 0) return 0;
     return highScores.cbegin()->getScore();
 }
 

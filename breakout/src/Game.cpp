@@ -395,7 +395,7 @@ bool Game::paddleMissesBall(int ballNo)
         {
             Rainbow* rainbowPtr = dynamic_cast<Rainbow*>(this);
             rainbowPtr -> decrementColor();
-            ball[ballNo]->setSpeed(1.02f * ball[ballNo]->getSpeed());
+            ball[ballNo]->speedUp();     // 5%
         }
 
         return true;
@@ -423,13 +423,13 @@ bool Game::paddleHitsWall()
 
 float Game::rightSideOfWindow() const
 {
-    sf::Rect rect = gameWindow.getGlobalBounds();
+    sf::FloatRect rect = gameWindow.getGlobalBounds();
     return rect.left + rect.width;
 }
 
 float Game::leftSideOfWindow() const
 {
-    sf::Rect rect = gameWindow.getGlobalBounds();
+    sf::FloatRect rect = gameWindow.getGlobalBounds();
     return rect.left;
 }
 
@@ -453,6 +453,6 @@ void Game::move2BallsToStartPosition()
     ball[1]->setPosition(sf::Vector2f(BallStartPosition.x + 8.f, BallStartPosition.y));
     ball[0]->setDirection(Ball::Direction::Up);
     ball[1]->setDirection(Ball::Direction::Up);
-    ball[0]->setAngle((rand()%10 + 5));
-    ball[1]->setAngle(-(rand()%10 + 5));
+    ball[0]->setAngle((rand()%10 + 5.f));
+    ball[1]->setAngle(-(rand()%10 + 5.f));
 }

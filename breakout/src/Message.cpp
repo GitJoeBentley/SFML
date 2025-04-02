@@ -24,7 +24,7 @@ Message::Message(const std::string& txt, sf::Font& font, unsigned int characterS
         sf::Vector2f buttonSize = sf::Vector2f(continueStr.size() * fontsize * 1.1f, fontsize*1.5f);
         setSize(sf::Vector2f(getSize().x, getSize().y + buttonSize.y * 1.5f));
 
-        continueButton = new Button(buttonSize, sf::Vector2f(getPosition().x, getPosition().y + 0.45 * getSize().y), continueStr, font, fontsize);
+        continueButton = new Button(buttonSize, sf::Vector2f(getPosition().x, getPosition().y + 0.45f * getSize().y), continueStr, font, fontsize);
         sf::FloatRect continueButtonRect = continueButton->getLocalBounds();
         continueButton->setOrigin(continueButtonRect.left + continueButtonRect.width / 2.0f, continueButtonRect.top + continueButtonRect.height / 2.0f);
         continueButton->setButtColorTextColor(sf::Color::Yellow, sf::Color::Black);

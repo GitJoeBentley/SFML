@@ -39,13 +39,13 @@ void Paddle::stop()
 
 float Paddle::left() const
 {
-    sf::Rect rect = getGlobalBounds();
+    sf::FloatRect rect = getGlobalBounds();
     return rect.left;
 }
 
 float Paddle::right() const
 {
-    sf::Rect rect = getGlobalBounds();
+    sf::FloatRect rect = getGlobalBounds();
     return rect.left + rect.width;
 }
 

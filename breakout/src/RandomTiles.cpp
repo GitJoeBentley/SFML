@@ -57,7 +57,7 @@ int RandomTiles::doRandomTileHit(Tile* tilePtr)
         ball[0]->setPosition(curPos);
         break;
     case 6:
-        ball[0]->setAngle(rand()%150 - 75);
+        ball[0]->setAngle(rand() % 150 - 75.f);
         ball[0]->setSpeed(1.05f * ball[0]->getSpeed());
         break;
     default:
