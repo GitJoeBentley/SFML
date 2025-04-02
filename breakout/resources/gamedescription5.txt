@@ -11,5 +11,7 @@ Violet = 6
 
 Your also get 10 points for a tile if it is hit with the same color
 ball except for the red tiles - they are always 0.
+
+Each time you miss the ball with the paddle, the ball speeds up.
  
 Good luck

@@ -1,0 +1,11 @@
+Two Balls 
+
+In this game, you may be playing with two balls.  The game starts
+with an "inactive" second ball in the inner rectangle surrounded
+by tiles.  When you breakout the second ball, it becomes "active",
+changes color and leaves the inner rectangle.
+
+Tiles are worth one point each if you hit them with the first ball 
+and two points it you hit them with the second ball.
+
+Good luck
