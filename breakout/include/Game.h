@@ -37,9 +37,7 @@ public:
     float rightSideOfWindow() const;
     float leftSideOfWindow() const;
     bool ball2IsActive() const;
-
     float ballXPosition(int ballNo = 0) const;
-    const sf::Text& getGameNameText() const;
 
     // non-const accessors
     sf::RectangleShape& getGameWindow();
@@ -77,7 +75,7 @@ protected:
     Paddle* paddle;
     HighScores* highScores;
     TextBox* highScoresTB;
-    int numTiles;
+    int numTiles;       // initialized by subclass setup function
     int score = 0;
     sf::CircleShape* ballsLeft;
     sf::Font font;

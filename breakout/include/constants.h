@@ -16,7 +16,12 @@ const sf::Color Indigo = sf::Color(0x4b369dff);
 const sf::Color Violet = sf::Color(0xa349a4ff);
 const sf::Color RainbowColor[7] = {Red, Orange, Yellow, Green, Blue, Indigo, Violet};
 const float GameBorderWidth = 20.0f;
+
+#ifdef _MSC_VER
+const std::string ResourcesPath = "resources/";
+#else
 const std::string ResourcesPath = "../resources/";
+#endif
 const std::string PaddleImageFile = ResourcesPath + "paddle.png";
 const std::string TicSoundFile = ResourcesPath + "tic.wav";
 const float PaddleSpeed = 660.f;

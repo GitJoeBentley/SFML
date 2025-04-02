@@ -7,7 +7,7 @@
 class ButtonBox : sf::RectangleShape
 {
     public:
-        ButtonBox(sf::RenderWindow& wdw, std::vector<std::string> buttonLabels, const std::string& message, sf::Font& font, float textSize = 20);
+        ButtonBox(sf::RenderWindow& wdw, std::vector<std::string> buttonLabels, const std::string& message, sf::Font& font, unsigned textSize = 20u);
         ~ButtonBox() = default;
         void draw();
         sf::Vector2f getBoxSize() const { return getSize(); }
