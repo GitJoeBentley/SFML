@@ -1,0 +1,17 @@
+150 Tiles
+
+In this game, there is a possible 150 tiles in random locations.
+The game starts with only 120 tiles visible.  There are 5 different
+colors and 5 different sizes for the tiles.  Each color has
+a different point value:
+
+Blue = 1     (the largest tile)
+Green = 2
+Yellow = 3
+Orange = 4
+Red = 5      (the smallest tile)
+
+When you hit a red tile, a new one with be generated in a different 
+location.
+
+Good luck
