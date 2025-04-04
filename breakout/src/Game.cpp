@@ -10,6 +10,7 @@ using namespace std;
 #include "Crusher.h"
 #include "TwoBalls.h"
 #include "FallingTiles.h"
+#include "Tiles150.h"
 
 Game::Game(sf::RenderWindow& wnd, int number, int balls, int time_remaining)
     : window(wnd), gameNumber(number), numBalls(balls), timeRemaining(time_remaining),
@@ -121,7 +122,7 @@ sf::Vector2f Game::getCenterOfGameWindow() const
 {
     float yOffset = 0.0f;
     // Move center down for Crusher game
-    if (gameNumber == 4) yOffset = 175.0f;
+    if (gameNumber == 4 or gameNumber == 9) yOffset = 175.0f;
     sf::FloatRect globalRect = gameWindow.getGlobalBounds();
     sf::FloatRect localRect = gameWindow.getLocalBounds();
     sf::Vector2f center = sf::Vector2f(globalRect.top + localRect.width/2.0f, globalRect.left + localRect.height/2.0f + yOffset);
@@ -226,6 +227,7 @@ int Game::hitATile(int ballNo)
     Tile* tilePtr = nullptr;
     float angle;
     int tileValue = 0;
+    bool redTileFlagForGame9 = false;
 
     for (int row = 0; row < tiles->getNumRows(); row++)
     {
@@ -303,8 +305,19 @@ int Game::hitATile(int ballNo)
                     }
                     else tileValue = 1;
                 }
+                else if (gameNumber == 9)                                                // 150 Tiles
+                {
+                    int index = Tiles150::getColorIndex(tilePtr->getFillColor());
+                    tileValue = 5 - index;
+                    // if the color is red (index = 0) and more than 30 tiles, create another one
+                    if (index == 0 and numTiles > 30)
+                    {
+                        redTileFlagForGame9 = true;
+                        tilePtr->setPosition(Tiles150::randomTilePosition());
+                    }
+                }
                 else tileValue = 1;
-                tiles->removeTile(row, col);
+                if (!redTileFlagForGame9) tiles->removeTile(row, col);
                 numTiles--;
                 return tileValue;
             }

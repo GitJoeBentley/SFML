@@ -15,7 +15,7 @@ void TwoBalls::setup()
     float tileHeight = 16.0f;
     ball[0] = new Ball(9.0f, 500.f);  // radius = 9, speed = 500.f
     ball[1] = new Ball(9.0, 250.f, Ball::Direction::Up, 45.f);
-    tiles = new Tiles(tileRows, tileCols, tileWidth, 16.f, 0);      // 8 rows, 12 columns, tile size 60x16
+    tiles = new Tiles(tileRows, tileCols, tileWidth);      // 8 rows, 12 columns, tile size 60x16
     numTiles = tileRows * tileCols;
     paddle = new Paddle(64.f);
     uint8_t redcolor = 0;

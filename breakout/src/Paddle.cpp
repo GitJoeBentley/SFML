@@ -4,7 +4,7 @@
 #include "constants.h"
 using namespace std;
 
-Paddle::Paddle(const float& width)
+Paddle::Paddle(float width)
     : sf::RectangleShape(sf::Vector2f(width, 16.0f)), direction(Stopped)
 {
     sf::FloatRect rect = getLocalBounds();

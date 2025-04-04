@@ -11,7 +11,7 @@ void Crusher::setup()
     int tileCols = 15;
     float tileWidth = 48.0f;
     ball[0] = new Ball(9.0f, 600.f);  // radius = 9, speed = 600
-    tiles = new Tiles(tileRows, tileCols, tileWidth, 16.0f, 0);      // 10 rows, 15 columns, tile size 48x16
+    tiles = new Tiles(tileRows, tileCols, tileWidth);      // 10 rows, 15 columns, tile size 48x16
     numTiles = tileRows * tileCols;
     paddle = new Paddle(64.0f);   // paddle width = 64
     uint8_t redcolor = 255;

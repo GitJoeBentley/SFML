@@ -20,7 +20,7 @@ void Rainbow::setup()
     ball[0]->setFillColor(Color[currentColorNumber]);
     tiles = new Tiles(tileRows, tileCols, tileWidth, 16.0f, tileWidth);      // 8 rows, 12 columns, tile size 60x16
     numTiles = tileRows * tileCols;
-    paddle = new Paddle(64.f);
+    paddle = new Paddle;
     paddle->setFillColor(Color[currentColorNumber]);
     Tile* tile;
     sf::Vector2f tilePos;

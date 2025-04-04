@@ -26,6 +26,7 @@
 #include "RandomTiles.h"
 #include "TwoBalls.h"
 #include "FallingTiles.h"
+#include "Tiles150.h"
 #include "Button.h"
 #include "ButtonBox.h"
 #include "Message.h"
@@ -134,6 +135,10 @@ int main ()
         case 8:
             game = new FallingTiles(window);
             fallingTiles = dynamic_cast<FallingTiles*>(game);
+            break;
+        case 9:
+            game = new Tiles150(window);
+            //tiles150 = dynamic_cast<Tiles150*>(game);
             break;
         default:
             ;
@@ -649,7 +654,7 @@ void displayGameDescription(size_t gameNumber, sf::RenderWindow& window, sf::Fon
 {
     sf::Vector2u RenderWindowSize = window.getSize();
 
-    const std::string digit = "01234567";
+    const std::string digit = "0123456789";
     const std::string filename = ResourcesPath + "gamedescription" + digit[gameNumber] + ".txt";
     std::string text, buffer;
 

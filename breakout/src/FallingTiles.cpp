@@ -11,7 +11,7 @@ void FallingTiles::setup()
     int tileRows = 8;
     int tileCols = 10;
     float tileWidth = 60.0f;
-    paddle = new Paddle(64.f);
+    paddle = new Paddle;
     ball[0] = new Ball(9.0f, 600.f);  // radius = 9, speed = 600.f
     tiles = new Tiles(tileRows, tileCols, tileWidth, 16.0f, tileWidth);      // 8 rows, 12 columns, tile size 60x16
     numTiles = tileRows * tileCols;
@@ -96,6 +96,7 @@ bool FallingTiles::tileHitsPaddle(const sf::RectangleShape* paddle) const
 {
     sf::FloatRect paddleRect = paddle->getGlobalBounds();
     sf::FloatRect tileRect;
+    if (fallingTiles.size() < 1) return false;
     for (std::vector<Tile*>::const_iterator cit = fallingTiles.cbegin(); cit != fallingTiles.cend(); ++cit)
     {
         tileRect = (*cit)->getGlobalBounds();
