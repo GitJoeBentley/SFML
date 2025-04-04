@@ -13,7 +13,7 @@ class Paddle : public sf::RectangleShape
 {
 public:
     enum Direction {Right, Left, Stopped};
-    Paddle(const float& width);
+    Paddle(float width = 64.0f);
 
     void move(Direction dir);
     void stop();
