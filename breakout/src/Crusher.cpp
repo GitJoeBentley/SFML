@@ -1,3 +1,4 @@
+#include <cstdint>
 #include "Crusher.h"
 
 Crusher::Crusher(sf::RenderWindow& wnd) : Game(wnd, 4, 10, INT_MAX)
@@ -43,5 +44,6 @@ void Crusher::crush()
             }
         }
     }
-    ball[0]->setSpeed(1.03f * ball[0]->getSpeed());
+    // speed the ball up by 3%
+    ball[0]->speedUp(3.f);
 }

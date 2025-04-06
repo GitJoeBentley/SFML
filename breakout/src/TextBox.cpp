@@ -17,7 +17,7 @@ TextBox::TextBox(const std::string& str, sf::Font& font, unsigned int textSize, 
     setFillColor(sf::Color::Black);
 }
 
-void TextBox::draw(sf::RenderWindow& window)
+void TextBox::drawTB(sf::RenderWindow& window)
 {
     window.draw(*this);
     window.draw(text);

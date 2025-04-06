@@ -11,7 +11,6 @@
 
 #include "constants.h"
 #include "proto.h"
-#include "types.h"
 #include "Ball.h"
 #include "Paddle.h"
 #include "Tiles.h"
@@ -27,7 +26,6 @@
 #include "TwoBalls.h"
 #include "FallingTiles.h"
 #include "Tiles150.h"
-#include "Button.h"
 #include "ButtonBox.h"
 #include "Message.h"
 #include "TextBox.h"
@@ -37,7 +35,6 @@ using std::endl;
 using sf::Keyboard;
 
 sf::Text* Title;
-
 
 int main ()
 {
@@ -144,7 +141,7 @@ int main ()
             ;
         }
 
-        if (game) message.setPosition(game->getCenterOfGameWindow());
+        if (game) message.setPosition(game->centerOfGameWindow());
         game->drawHighScores();
 
         //////////// The GAME loop
@@ -215,9 +212,11 @@ int main ()
             // Start of Active Game loop
             if (game->getStatus() == Game::GameStatus::Active)
             {
-                if (gameSelected == 8)
+                if (gameSelected == 8)  // Falling Tiles
                 {
-                    if (rand() % 32767 == 0)
+                    game->process();
+                    if (game->getStatus() == Game::GameStatus::TileHitsPaddle) break;
+                    /*if (rand() % 32767 == 0)
                     {
                         fallingTiles->findTileToFall();
                     }
@@ -233,11 +232,12 @@ int main ()
                     if (fallingTiles->tileGetsPassedThePaddle(game->getPaddle()))
                     {
                         game->incrementScore(-10);
-                    }
+                    }*/
                 }
-                if (gameSelected == 3)
+                if (gameSelected == 3)  // Crazy Ball
                 {
-                    crazyBallGame->doCrazy();
+                    game->process();
+
                 }
                 dt = clock.restart();
 // TODO (Joe#1#): Move these update calls to the game class
@@ -399,8 +399,8 @@ int main ()
             }
         }
         game->drawGameObjects();
-        tb = new TextBox(statement, font, 30, sf::Color::Magenta,game->getCenterOfGameWindow());
-        tb->draw(window);
+        tb = new TextBox(statement, font, 30, sf::Color::Magenta,game->centerOfGameWindow());
+        tb->drawTB(window);
         window.display();
         sf::sleep(sf::Time(sf::seconds(5.0f)));
         delete tb;

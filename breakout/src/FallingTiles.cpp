@@ -8,15 +8,15 @@ FallingTiles::FallingTiles(sf::RenderWindow& wnd) : Game(wnd, 8)
 void FallingTiles::setup()
 {
     sf::Color color[3] = { Red, Green, Blue };
+    int counter = 0;
     int tileRows = 8;
     int tileCols = 10;
+    numTiles = tileRows * tileCols;
     float tileWidth = 60.0f;
+    float tileOffset = 60.0f;
     paddle = new Paddle;
     ball[0] = new Ball(9.0f, 600.f);  // radius = 9, speed = 600.f
-    tiles = new Tiles(tileRows, tileCols, tileWidth, 16.0f, tileWidth);      // 8 rows, 12 columns, tile size 60x16
-    numTiles = tileRows * tileCols;
-
-    int counter = 0;
+    tiles = new Tiles(tileRows, tileCols, tileWidth, 16.0f, tileOffset);      // 8 rows, 12 columns, tile size 60x16
 
     for (int row = 0; row < tileRows; row++)
     {
@@ -26,6 +26,45 @@ void FallingTiles::setup()
             tiles->getTile(row, col)->setFillColor(color[counter%3]);
         }
     }
+}
+
+void FallingTiles::process()
+{
+    if (rand() % 32767 == 0)
+    {
+        findTileToFall();
+    }
+    if (rand() % 1200 == 1)
+    {
+        fall();
+    }
+    processTileAtPaddleHeight();
+}
+
+void FallingTiles::processTileAtPaddleHeight()
+{
+    float tileHeight;
+    float paddleHeight = paddle->getPosition().y;
+    if (fallingTiles.size() < 1) return;
+    for (std::vector<Tile*>::iterator it = fallingTiles.begin(); it != fallingTiles.end(); ++it)
+    {
+        tileHeight = (*it)->getPosition().y;
+        if (tileHeight >= paddleHeight)
+        {
+            // Did the tile hit the paddle?
+            sf::FloatRect paddleRect = paddle->getGlobalBounds();
+            sf::FloatRect tileRect = (*it)->getGlobalBounds();
+            if (tileRect.intersects(paddleRect)) setStatus(Game::GameStatus::TileHitsPaddle);
+            else
+            {
+                incrementScore(-10);
+                tiles->removeTile((*it)->getRow(), (*it)-> getCol());
+                fallingTiles.erase(it);
+            }
+            return;
+        }
+    }
+    return;
 }
 
 std::vector<Tile*>& FallingTiles::getFillingTiles()
@@ -44,25 +83,31 @@ void FallingTiles::insert(Tile* ptrTile)
     }
     ptrTile->setFillColor(Yellow);
     sf::Vector2f size = ptrTile->getSize();
-    size.x-=8.f;
-    size.y-=4.f;
+    // decrease the size of a falling tile
+    size.x -= 8.f;
+    size.y -= 4.f;
     ptrTile->setSize(size);
-    auto lb = ptrTile->getLocalBounds();
-    ptrTile->setOrigin(lb.width/2.0f,lb.height / 2.0f);
+    sf::FloatRect rect = ptrTile->getLocalBounds();
+    ptrTile->setOrigin(rect.width/2.0f, rect.height / 2.0f);
     fallingTiles.push_back(ptrTile);
 }
 
 void FallingTiles::fall()
 {
-    if (fallingTiles.size() == 0)
-        return;
+    // If no tiles are falling, bail out
+    if (fallingTiles.size() == 0) return;
+
+    // choose a random falling tile to fall
     size_t index = rand() % fallingTiles.size();
     Tile* ptrTile = fallingTiles[index];
+
+    // Move the random falling tile down a random amount
     sf::Vector2f pos = ptrTile->getPosition();
     pos.y += static_cast<float>(rand() % 29);
     ptrTile->setPosition(pos);
 }
 
+// Find a random tile at the bottom of a random column
 void FallingTiles::findTileToFall()
 {
     Tile* ptrTile;
@@ -78,7 +123,7 @@ void FallingTiles::findTileToFall()
         }
     }
 }
-
+/*
 std::vector<Tile*>::iterator FallingTiles::findTile(Tile* ptrTile)
 {
     std::vector<Tile*>::iterator it;
@@ -90,37 +135,4 @@ std::vector<Tile*>::iterator FallingTiles::findTile(Tile* ptrTile)
         }
     }
     return fallingTiles.end();
-}
-
-bool FallingTiles::tileHitsPaddle(const sf::RectangleShape* paddle) const
-{
-    sf::FloatRect paddleRect = paddle->getGlobalBounds();
-    sf::FloatRect tileRect;
-    if (fallingTiles.size() < 1) return false;
-    for (std::vector<Tile*>::const_iterator cit = fallingTiles.cbegin(); cit != fallingTiles.cend(); ++cit)
-    {
-        tileRect = (*cit)->getGlobalBounds();
-        if (tileRect.intersects(paddleRect)) return true;
-    }
-    return false;
-}
-
-bool FallingTiles::tileGetsPassedThePaddle(const sf::RectangleShape* paddle)
-{
-    float tileHeight;
-    float paddleHeight = paddle->getPosition().y;
-    Tile* ptrTile;
-    std::vector<Tile*>::iterator it;
-    for (it = fallingTiles.begin(); it != fallingTiles.end(); ++it)
-    {
-        ptrTile = *(it);
-        tileHeight = ptrTile->getPosition().y;
-        if (tileHeight > paddleHeight)
-        {
-            tiles->removeTile(ptrTile->getRow(), ptrTile-> getCol());
-            fallingTiles.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
+}*/

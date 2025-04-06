@@ -1,6 +1,7 @@
 #include "Button.h"
+#include "constants.h"
 
-Button::Button(sf::Vector2f buttonSize, sf::Vector2f pos, std::string textStr, sf::Font& font, unsigned int textSize)
+Button::Button(sf::Vector2f buttonSize, sf::Vector2f pos, const std::string& textStr, sf::Font& font, unsigned int textSize)
     : sf::RectangleShape(buttonSize), text(textStr, font, textSize)
 {
     setPosition(pos);
@@ -30,14 +31,14 @@ void Button::highlight()
 void Button::normal()
 {
     setFillColor(color);
-    setOutlineColor(sf::Color::Blue);
+    setOutlineColor(Indigo);
     setOutlineThickness(5.0f);
 }
 
-void Button::setButtColorTextColor(sf::Color buttColor, sf::Color textColor)
+void Button::setColor(sf::Color buttColor, sf::Color textColor)
 {
-        setFillColor(buttColor);
-        text.setFillColor(textColor);
-        setOutlineColor(sf::Color::Red);
-        setOutlineThickness(3.0f);
+    setFillColor(buttColor);
+    text.setFillColor(textColor);
+    setOutlineColor(sf::Color::Red);
+    setOutlineThickness(3.0f);
 }

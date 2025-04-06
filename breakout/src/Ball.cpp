@@ -13,6 +13,7 @@ Ball::Ball(float ballradius, float ballspeed, Direction dir, float ang)
     moveToStartPosition();
 }
 
+// getters
 bool Ball::getActive() const
 {
     return active;
@@ -28,6 +29,32 @@ Ball::Direction Ball::getDirection() const
     return direction;
 }
 
+float Ball::getSpeed() const
+{
+    return speed;
+}
+
+float Ball::bottom() const
+{
+    return getPosition().y + getRadius();
+}
+
+float Ball::top() const
+{
+    return getPosition().y - getRadius();
+}
+
+float Ball::right() const
+{
+    return getPosition().x + getRadius();
+}
+
+float Ball::left() const
+{
+    return getPosition().x - getRadius();
+}
+
+// setters
 void Ball::setDirection(Direction dir)
 {
     direction = dir;
@@ -37,12 +64,6 @@ void Ball::setAngle( float ang)
 {
     angle = ang;
 }
-
-float Ball::getSpeed() const
-{
-    return speed;
-}
-
 
 void Ball::moveToStartPosition()
 {
@@ -125,26 +146,6 @@ bool Ball::hitTheWall()
     return false;
 }
 
-float Ball::bottom() const
-{
-    return getPosition().y + getRadius();
-}
-
-float Ball::top() const
-{
-    return getPosition().y - getRadius();
-}
-
-float Ball::right() const
-{
-    return getPosition().x + getRadius();
-}
-
-float Ball::left() const
-{
-    return getPosition().x - getRadius();
-}
-
 void Ball::update(sf::Time dt)
 {
     const float RPD = 0.0174533f;   // Radians Per Degree
@@ -152,12 +153,10 @@ void Ball::update(sf::Time dt)
     if (direction == Direction::Up)
     {
         setPosition(sf::Vector2f(getPosition().x + speed * dt.asSeconds() * std::sin(RPD*angle), getPosition().y - speed * dt.asSeconds() *std::cos(RPD*angle)));
-        // exit(1);
     }
     else  // ball direction is down
     {
         setPosition(sf::Vector2f(getPosition().x + speed * dt.asSeconds() * std::sin(RPD*angle), getPosition().y + speed * dt.asSeconds() * std::cos(RPD*angle)));
     }
-    //cout << "Angle = " << angle << endl;
 }
 

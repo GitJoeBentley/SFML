@@ -1,9 +1,8 @@
 #include "ButtonBox.h"
-#include "Button.h"
-
+#include "constants.h"
 
 ButtonBox::ButtonBox(sf::RenderWindow& wdw, std::vector<std::string> buttonLabels, const std::string& message, sf::Font& font, unsigned textSize)
-: window(wdw), numButtons(buttonLabels.size()), buttons(new Button*[numButtons]), msgText(message,font,textSize)
+    : window(wdw), numButtons(buttonLabels.size()), buttons(new Button*[numButtons]), msgText(message,font,textSize)
 {
     // Determine button width
     // Find longest button width
@@ -27,7 +26,6 @@ ButtonBox::ButtonBox(sf::RenderWindow& wdw, std::vector<std::string> buttonLabel
     float windowMiddle = globalRect.left + localRect.width / 2.0f;
 
     // create the buttons
-
     for (int i = 0; i < numButtons; i++)
     {
         buttons[i] = new Button(buttonSize, sf::Vector2f(windowMiddle, windowTop + (i + 1.5f) *  buttonOffset), buttonLabels[i], font, textSize);
@@ -37,6 +35,21 @@ ButtonBox::ButtonBox(sf::RenderWindow& wdw, std::vector<std::string> buttonLabel
     sf::FloatRect textRect = msgText.getLocalBounds();
     msgText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     msgText.setPosition(sf::Vector2f(windowMiddle, windowTop + (numButtons + 2.0f) *  buttonOffset));
+}
+
+sf::Vector2f ButtonBox::getBoxSize() const
+{
+    return getSize();
+}
+
+Button** ButtonBox::getButtons() const
+{
+    return buttons;
+}
+
+Button* ButtonBox::getButton(int index) const
+{
+    return buttons[index];
 }
 
 void ButtonBox::draw()

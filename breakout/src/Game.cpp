@@ -118,10 +118,10 @@ Game::GameStatus Game::getStatus() const
     return status;
 }
 
-sf::Vector2f Game::getCenterOfGameWindow() const
+sf::Vector2f Game::centerOfGameWindow() const
 {
     float yOffset = 0.0f;
-    // Move center down for Crusher game
+    // Move center down for Crusher game or 150 Tiles game
     if (gameNumber == 4 or gameNumber == 9) yOffset = 175.0f;
     sf::FloatRect globalRect = gameWindow.getGlobalBounds();
     sf::FloatRect localRect = gameWindow.getLocalBounds();
@@ -352,7 +352,7 @@ void Game::drawBallsLeft()
 
 void Game::drawHighScores()
 {
-    highScoresTB->draw(window);
+    highScoresTB->drawTB(window);
 }
 
 sf::Text& Game::getTimeRemainingText()
