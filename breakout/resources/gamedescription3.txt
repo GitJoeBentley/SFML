@@ -4,4 +4,7 @@ In this game the ball changes speed, changes color,
 reverses direction, and doesn't always go straight.
 You'll have to react quickly.
 
+A change in the ball color indicates different
+behavior for the ball.
+
 Good luck
