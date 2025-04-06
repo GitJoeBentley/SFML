@@ -13,6 +13,7 @@ class FallingTiles : public Game
         FallingTiles(sf::RenderWindow& wnd);
         virtual ~FallingTiles() = default;
         void setup();
+        void process();
         std::vector<Tile*>& getFillingTiles();
         void insert(Tile* ptrTile);
         void fall();
@@ -20,6 +21,8 @@ class FallingTiles : public Game
         std::vector<Tile*>::iterator findTile(Tile* ptrTile);
         bool tileHitsPaddle(const sf::RectangleShape* paddle) const;
         bool tileGetsPassedThePaddle(const sf::RectangleShape* paddle);
+        bool anyTileAtPaddleHeight() const;
+        void processTileAtPaddleHeight();
     private:
         std::vector<Tile*> fallingTiles;
 };

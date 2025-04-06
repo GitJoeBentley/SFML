@@ -9,7 +9,7 @@ class CrazyBall: public Game
         CrazyBall(sf::RenderWindow& wnd);
         void setup();
         void changeSpeed(int arg);
-        void doCrazy();
+        void process();
 };
 
 #endif // CRAZYBALL_H

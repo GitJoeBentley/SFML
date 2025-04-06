@@ -1,7 +1,8 @@
 #ifndef PROTO_H_INCLUDED
 #define PROTO_H_INCLUDED
-#include "types.h"
 #include "Game.h"
+
+enum class GameSelection { Exit, Same, New};
 
 bool hasJoystick();
 char getKey();

@@ -20,11 +20,12 @@ public:
     Game(sf::RenderWindow& wnd, int gameNumber, int balls = 5, int time_remaining = INT_MAX);
     virtual ~Game();
     virtual void setup() = 0;
+    virtual void process() {}
 
     // getters
     Game::GameStatus getStatus() const;
     std::string getName() const;
-    sf::Vector2f getCenterOfGameWindow() const;
+    sf::Vector2f centerOfGameWindow() const;
     int getScore() const;
     int getNumTiles() const;
     int getNumBalls() const;
@@ -33,10 +34,10 @@ public:
     int getGameNumber() const;
     HighScores* getHighScores() const;
     float paddleHeight() const;
-    float ballHeight(int ballNo = 0) const;
     float rightSideOfWindow() const;
     float leftSideOfWindow() const;
     bool ball2IsActive() const;
+    float ballHeight(int ballNo = 0) const;
     float ballXPosition(int ballNo = 0) const;
 
     // non-const accessors
