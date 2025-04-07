@@ -54,8 +54,10 @@ void CrazyBall::changeSpeed(int arg)
     }
 }
 
-void CrazyBall::process()
+void CrazyBall::update(sf::Time dt)
 {
+    paddle->update(dt);
+    ball[0]->update(dt);
     float gameWindowYPos = gameWindow.getSize().y / 2.f;
     int temp = rand()%32767;
     switch (temp)
@@ -97,3 +99,9 @@ void CrazyBall::process()
     }
 }
 
+int CrazyBall::processHitTile(Tile* ptrTile, int)
+{
+    tiles->removeTile(ptrTile);
+    numTiles--;
+    return 1;
+}

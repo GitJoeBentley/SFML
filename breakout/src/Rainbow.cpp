@@ -38,6 +38,16 @@ void Rainbow::setup()
     }
 }
 
+int Rainbow::processHitTile(Tile* ptrTile, int)
+{
+    int tileValue;
+    if (ball[0]->getFillColor() == ptrTile->getFillColor()) tileValue = 10;
+    tileValue = getColorIndex(ptrTile->getFillColor());
+    tiles->removeTile(ptrTile);
+    numTiles--;
+    return tileValue;
+}
+
 void Rainbow::decrementColor()
 {
     currentColorNumber--;

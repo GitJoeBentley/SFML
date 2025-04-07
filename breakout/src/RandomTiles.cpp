@@ -2,7 +2,7 @@
 #include "constants.h"
 #include "proto.h"
 
-RandomTiles::RandomTiles(sf::RenderWindow& wnd) : Game(wnd, 6, 10)
+RandomTiles::RandomTiles(sf::RenderWindow& wnd) : Game(wnd, 6, 7, 70)
 {
     setup();
 }
@@ -25,11 +25,11 @@ void RandomTiles::setup()
     }
 }
 
-int RandomTiles::doRandomTileHit(Tile* tilePtr)
+int RandomTiles::processHitTile(Tile* ptrTile, int)
 {
     sf::Vector2f curPos = ball[0]->getPosition();
     int shift;
-    int colorIndex = getColorIndex(tilePtr->getFillColor());
+    int colorIndex = getColorIndex(ptrTile->getFillColor());
     switch (colorIndex)
     {
     case 0:
@@ -63,6 +63,8 @@ int RandomTiles::doRandomTileHit(Tile* tilePtr)
     default:
         colorIndex = 0;
     }
+    tiles->removeTile(ptrTile);
+    numTiles--;
     return colorIndex;
 }
 

@@ -30,3 +30,10 @@ void EasyGame::setup()
         }
     }
 }
+
+int EasyGame::processHitTile(Tile* ptrTile, int)
+{
+    tiles->removeTile(ptrTile);
+    numTiles--;
+    return 1;
+}

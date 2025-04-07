@@ -46,6 +46,13 @@ void Tiles::removeTile(unsigned row, unsigned col)
     array[row][col] = nullptr;
 }
 
+void Tiles::removeTile(Tile* ptrTile)
+{
+    if (ptrTile)
+        removeTile(ptrTile->getRow(), ptrTile->getCol());
+}
+
+
 int Tiles::getNumRows() const
 {
     return numRows;

@@ -32,3 +32,10 @@ void BasicGame::setup()
         }
     }
 }
+
+int BasicGame::processHitTile(Tile* ptrTile, int)
+{
+    tiles->removeTile(ptrTile);
+    numTiles--;
+    return 1;
+}

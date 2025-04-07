@@ -79,10 +79,10 @@ int main ()
 
     sf::Event event;
 
-    CrazyBall* crazyBallGame = nullptr;
+    //CrazyBall* crazyBallGame = nullptr;
     TwoBalls* twoBalls = nullptr;
     Crusher* crusher = nullptr;
-    FallingTiles* fallingTiles = nullptr;
+    //FallingTiles* fallingTiles = nullptr;
 
     while (gameSelection != GameSelection::Exit)
     {
@@ -113,7 +113,7 @@ int main ()
             break;
         case 3:
             game = new CrazyBall(window);
-            crazyBallGame = dynamic_cast<CrazyBall*>(game);
+            //crazyBallGame = dynamic_cast<CrazyBall*>(game);
             break;
         case 4:
             game = new Crusher(window);
@@ -131,7 +131,7 @@ int main ()
             break;
         case 8:
             game = new FallingTiles(window);
-            fallingTiles = dynamic_cast<FallingTiles*>(game);
+            //fallingTiles = dynamic_cast<FallingTiles*>(game);
             break;
         case 9:
             game = new Tiles150(window);
@@ -212,47 +212,13 @@ int main ()
             // Start of Active Game loop
             if (game->getStatus() == Game::GameStatus::Active)
             {
-                if (gameSelected == 8)  // Falling Tiles
+                game->update(clock.restart());
+                if (gameSelected == 8 && game->getStatus() == Game::GameStatus::TileHitsPaddle) break;
+                if (gameSelected == 7 && game->getBall2Status() == Game::Ball2Status::Inactive && game->ball2LeavesInnerRect())
                 {
-                    game->process();
-                    if (game->getStatus() == Game::GameStatus::TileHitsPaddle) break;
-                    /*if (rand() % 32767 == 0)
-                    {
-                        fallingTiles->findTileToFall();
-                    }
-                    if (rand() % 1200 == 1)
-                    {
-                        fallingTiles->fall();
-                    }
-                    if (fallingTiles->tileHitsPaddle(game->getPaddle()))
-                    {
-                        game->setStatus(Game::GameStatus::TileHitsPaddle);
-                        break;
-                    }
-                    if (fallingTiles->tileGetsPassedThePaddle(game->getPaddle()))
-                    {
-                        game->incrementScore(-10);
-                    }*/
-                }
-                if (gameSelected == 3)  // Crazy Ball
-                {
-                    game->process();
-
-                }
-                dt = clock.restart();
-// TODO (Joe#1#): Move these update calls to the game class
-                game->getPaddle()->update(dt);
-                game->getBall()->update(dt);
-                if (gameSelected == 7)
-                {
-                    game->getBall(1)->update(dt);
-
-                    if (game->getBall2Status() == Game::Ball2Status::Inactive && game->ball2LeavesInnerRect())
-                    {
-                        soundEffect[SoundEffect::BallHitTile].play();
-                        game->getBall(1)->setFillColor(sf::Color::Magenta);
-                        game->setBall2StatusActive();
-                    }
+                    soundEffect[SoundEffect::BallHitTile].play();
+                    game->getBall(1)->setFillColor(sf::Color::Magenta);
+                    game->setBall2StatusActive();
                 }
 
                 window.clear();
@@ -285,7 +251,7 @@ int main ()
                 {
                     soundEffect[SoundEffect::BallHitTile].play();
                     game->incrementScore(tileValue);
-                    game->getBall()->update(dt);   // this is a hack to move the ball after a tile hit
+                    //game->getBall()->update(dt);   // this is a hack to move the ball after a tile hit
 
                     if (game->getNumTiles() == 0 or tileValue == 100)
                     {
@@ -313,7 +279,7 @@ int main ()
                 else if (game->paddleHitsBall() || (gameSelected == 7 && game->paddleHitsBall(1)))
                 {
                     // Paddle hit the ball
-                    game->getBall()->update(dt);
+                    //game->getBall()->update(dt);
                     soundEffect[SoundEffect::PaddleHitBall].play();
                 }
                 // Paddle misses ball?
@@ -344,7 +310,7 @@ int main ()
                         game->getPaddle()->moveToStartPosition();
                         if (gameSelected == 7 && game->ball2IsActive()) game->move2BallsToStartPosition();
                         else game->getBall()->moveToStartPosition();
-                        dt = clock.restart();
+                        clock.restart();
                     }
                 }
                 // No contact with ball or paddle
@@ -411,7 +377,7 @@ int main ()
             game->getHighScores()->WriteHighScoresFile();
         }
 
-        crazyBallGame = nullptr;
+        //crazyBallGame = nullptr;
         twoBalls = nullptr;
         crusher = nullptr;
         if (game) delete game;

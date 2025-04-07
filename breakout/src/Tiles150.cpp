@@ -49,3 +49,23 @@ int Tiles150::getColorIndex(sf::Color color_)
         if (color_ == Color[i]) return i;
     return -1;
 }
+
+
+int Tiles150::processHitTile(Tile* ptrTile, int)
+{
+    int index = getColorIndex(ptrTile->getFillColor());
+    int tileValue;
+    tileValue = 5 - index;
+    // if the color is red (index = 0) and more than 30 tiles, create another one
+    if (index == 0 and numTiles > 30)
+    {
+        ptrTile->setPosition(Tiles150::randomTilePosition());
+    }
+    else
+    {
+        tiles->removeTile(ptrTile);
+    }
+    numTiles--;
+    return tileValue;
+}
+

@@ -78,7 +78,7 @@ Paddle* Game::getPaddle()
     return paddle;
 }
 
-Ball* Game::getBall(int ballNo)
+Ball*& Game::getBall(int ballNo)
 {
     return ball[ballNo];
 }
@@ -159,6 +159,11 @@ float Game::ballHeight(int ballNo) const
     return ball[ballNo]->getPosition().y;
 }
 
+float Game::getBallSpeed(int ballNo)
+{
+    return ball[ballNo]->getSpeed();
+}
+
 TextBox* Game::getHighScoresTB()
 {
     return highScoresTB;
@@ -213,6 +218,30 @@ void Game::decrementTimeRemaining()
     timeRemaining--;
 }
 
+void Game::update(sf::Time dt)
+{
+    paddle->update(dt);
+    ball[0]->update(dt);
+}
+
+void Game::updateBall2(sf::Time dt)
+{
+    const float RPD = 0.0174533f;   // Radians Per Degree
+
+    sf::Vector2f ball2Position = ball[1]->getPosition();
+    float speed = ball[1]->getSpeed();
+    float angle = ball[1]->getAngle();
+
+    if (ball[1]->getDirection() == Ball::Direction::Up)
+    {
+        ball[1]->setPosition(sf::Vector2f(ball2Position.x + speed * dt.asSeconds() * std::sin(RPD*angle), ball2Position.y - speed * dt.asSeconds() *std::cos(RPD*angle)));
+    }
+    else  // ball direction is down
+    {
+        ball[1]->setPosition(sf::Vector2f(ball2Position.x + speed * dt.asSeconds() * std::sin(RPD*angle), ball2Position.y + speed * dt.asSeconds() * std::cos(RPD*angle)));
+    }
+}
+
 // return -1 is no contact
 int Game::hitATile(int ballNo)
 {
@@ -226,8 +255,6 @@ int Game::hitATile(int ballNo)
 
     Tile* tilePtr = nullptr;
     float angle;
-    int tileValue = 0;
-    bool redTileFlagForGame9 = false;
 
     for (int row = 0; row < tiles->getNumRows(); row++)
     {
@@ -265,61 +292,9 @@ int Game::hitATile(int ballNo)
                 ;
             }
 
-            if (hit)
+            if (hit)    // Ball has hit a tile
             {
-                // Ball has hit a tile
-
-                if (gameNumber == 2)                                           // "One Red Tile"
-                {
-                    if (tilePtr->getFillColor() == sf::Color::Red) return 100;
-                    else tileValue = 1;
-                }
-                else if (gameNumber == 5)                                                // Rainbow
-                {
-                    if (ball[0]->getFillColor() == tilePtr->getFillColor()) tileValue = 10;
-                    else tileValue = Rainbow::getColorIndex(tilePtr->getFillColor());
-                }
-                else if (gameNumber == 6)                                                // Random Tiles
-                {
-                    RandomTiles* randomTilesPtr = dynamic_cast<RandomTiles*>(this);
-                    tileValue = randomTilesPtr->doRandomTileHit(tilePtr);
-                }
-                else if (gameNumber == 7 && ballNo == 1 and ball2Status == Ball2Status::Active)  // Two Balls
-                {
-                    tileValue = 2;
-                }
-                else if (gameNumber == 7 && ballNo == 1 and ball2Status == Ball2Status::Inactive)  // Two Balls
-                {
-                    return -1;
-                }
-                else if (gameNumber == 8)
-                {
-                    FallingTiles* ptrFT = dynamic_cast<FallingTiles*>(this);
-                    auto it = ptrFT->findTile(tilePtr);
-                    if (it != ptrFT->getFillingTiles().end())
-                    {
-                        ptrFT->getFillingTiles().erase(it);
-                        tileValue = 10;
-                        // Speed the ball up
-                        ball[0]->speedUp();     // 5%
-                    }
-                    else tileValue = 1;
-                }
-                else if (gameNumber == 9)                                                // 150 Tiles
-                {
-                    int index = Tiles150::getColorIndex(tilePtr->getFillColor());
-                    tileValue = 5 - index;
-                    // if the color is red (index = 0) and more than 30 tiles, create another one
-                    if (index == 0 and numTiles > 30)
-                    {
-                        redTileFlagForGame9 = true;
-                        tilePtr->setPosition(Tiles150::randomTilePosition());
-                    }
-                }
-                else tileValue = 1;
-                if (!redTileFlagForGame9) tiles->removeTile(row, col);
-                numTiles--;
-                return tileValue;
+                return processHitTile(tilePtr, ballNo);
             }
         }
     }
@@ -446,7 +421,7 @@ float Game::leftSideOfWindow() const
     return rect.left;
 }
 
-bool Game::ball2LeavesInnerRect()
+bool Game::ball2LeavesInnerRect() const
 {
     float ballXPos = ball[1]->getPosition().x;
     float ballYPos = ball[1]->getPosition().y;

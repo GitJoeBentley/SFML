@@ -46,4 +46,31 @@ void TwoBalls::setup()
     innerRect = sf::FloatRect(GameBorderWidth + 4.f * tileWidth, TopEdge + GameBorderWidth + 4.f * tileHeight, 4.f * tileWidth, 4.f * tileHeight);
 }
 
+int TwoBalls::processHitTile(Tile* ptrTile, int ballNo)
+{
+    int tileValue;
+    if (ballNo == 1 and ball2Status == Ball2Status::Active)
+    {
+        tiles->removeTile(ptrTile);
+        numTiles--;
+        tileValue = 2;
+    }
+    if (ballNo == 1 and ball2Status == Ball2Status::Inactive)  // Two Balls
+    {
+        tileValue = -1;
+    }
+    if (ballNo == 0)
+    {
+        tiles->removeTile(ptrTile);
+        numTiles--;
+        tileValue = 1;
+    }
+    return tileValue;
+}
 
+void TwoBalls::update(sf::Time dt)
+{
+    paddle->update(dt);
+    ball[0]->update(dt);
+    updateBall2(dt);
+}

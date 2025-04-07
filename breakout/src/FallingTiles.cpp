@@ -28,8 +28,10 @@ void FallingTiles::setup()
     }
 }
 
-void FallingTiles::process()
+void FallingTiles::update(sf::Time dt)
 {
+    paddle->update(dt);
+    ball[0]->update(dt);
     if (rand() % 32767 == 0)
     {
         findTileToFall();
@@ -39,6 +41,37 @@ void FallingTiles::process()
         fall();
     }
     processTileAtPaddleHeight();
+}
+
+int FallingTiles::processHitTile(Tile* ptrTile, int)
+{
+    int tileValue = 1;
+    std::cout<<"FallingTiles::processHitTile()"<< std::endl;
+    auto it = findTile(ptrTile);
+    if (it != fallingTiles.end())
+    {
+        fallingTiles.erase(it);
+
+        // Speed the ball up
+        ball[0]->speedUp();     // 5%
+        tileValue = 10;
+    }
+    tiles->removeTile(ptrTile);
+    numTiles--;
+    return tileValue;
+}
+
+std::vector<Tile*>::iterator FallingTiles::findTile(Tile* ptrTile)
+{
+    std::vector<Tile*>::iterator it;
+    for (it = fallingTiles.begin(); it != fallingTiles.end(); ++it)
+    {
+        if (*it == ptrTile)
+        {
+            return it;
+        }
+    }
+    return fallingTiles.end();
 }
 
 void FallingTiles::processTileAtPaddleHeight()
@@ -64,6 +97,7 @@ void FallingTiles::processTileAtPaddleHeight()
             return;
         }
     }
+
     return;
 }
 
@@ -123,16 +157,3 @@ void FallingTiles::findTileToFall()
         }
     }
 }
-/*
-std::vector<Tile*>::iterator FallingTiles::findTile(Tile* ptrTile)
-{
-    std::vector<Tile*>::iterator it;
-    for (it = fallingTiles.begin(); it != fallingTiles.end(); ++it)
-    {
-        if (*it == ptrTile)
-        {
-            return it;
-        }
-    }
-    return fallingTiles.end();
-}*/

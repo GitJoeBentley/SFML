@@ -47,3 +47,10 @@ void Crusher::crush()
     // speed the ball up by 3%
     ball[0]->speedUp(3.f);
 }
+
+int Crusher::processHitTile(Tile* ptrTile, int)
+{
+    tiles->removeTile(ptrTile);
+    numTiles--;
+    return 1;
+}
