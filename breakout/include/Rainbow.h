@@ -10,8 +10,12 @@ public:
     static int getColorIndex(sf::Color color_);
 
     Rainbow(sf::RenderWindow& wnd);
+
+    // virtual functions
     virtual ~Rainbow() = default;
     void setup();
+    int processHitTile(Tile* ptrTile, int = 0);
+
     void decrementColor();
 private:
     int currentColorNumber = 6;

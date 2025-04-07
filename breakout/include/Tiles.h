@@ -11,13 +11,16 @@ class Tiles
 public:
     Tiles(int rows, int cols, float tilewidth = 64.0f, float tileheight = 16.0f, float offset = 0.0f);
     virtual ~Tiles();
-    // const Tile& getTile(unsigned row, unsigned col) const;
-    Tile* getTile(unsigned row, unsigned col) const;
-    float getBottomEdge();
-    void draw(sf::RenderWindow& window);
+
+    // getters
     int getNumRows() const;
     int getNumCols() const;
+    Tile* getTile(unsigned row, unsigned col) const;
+
     void removeTile(unsigned row, unsigned col);
+    void removeTile(Tile* ptrTile);
+    void draw(sf::RenderWindow& window);
+
 private:
     int numRows;
     int numCols;

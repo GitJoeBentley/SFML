@@ -6,8 +6,12 @@ class RandomTiles : public Game
 {
 public:
     RandomTiles(sf::RenderWindow& wnd);
+
+    // virtual functions
     virtual ~RandomTiles() = default;
     void setup();
+    int processHitTile(Tile* ptrTile, int);
+
     int doRandomTileHit(Tile* tileptr);
 };
 

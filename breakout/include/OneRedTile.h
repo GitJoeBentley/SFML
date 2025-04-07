@@ -6,9 +6,11 @@ class OneRedTile : public Game
 {
     public:
         OneRedTile(sf::RenderWindow& wnd);
-        virtual ~OneRedTile();
+
+        // virtual functions
+        virtual ~OneRedTile() = default;
         void setup();
-        //int hitATile() override;
+        int processHitTile(Tile* ptrTile, int = 0);
 };
 
 #endif // ONEREDTILE_H

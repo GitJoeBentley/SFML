@@ -9,6 +9,7 @@ class BasicGame : public Game
         BasicGame(sf::RenderWindow& wnd);
         virtual ~BasicGame() = default;
         void setup();
+        int processHitTile(Tile* ptrTile, int ballNo = 0);
 };
 
 #endif // BASICGAME_H

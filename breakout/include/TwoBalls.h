@@ -4,16 +4,15 @@
 
 
 class TwoBalls : public Game
-
 {
 public:
-
-
     TwoBalls(sf::RenderWindow& wnd);
+
+    // Virtual functions
     virtual ~TwoBalls() = default;
     void setup();
-private:
-
+    void update(sf::Time dt);
+    int processHitTile(Tile* ptrTile, int ballNo = 0);
 };
 
 #endif // TWOBALLS_H

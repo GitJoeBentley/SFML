@@ -20,7 +20,8 @@ public:
     Game(sf::RenderWindow& wnd, int gameNumber, int balls = 5, int time_remaining = INT_MAX);
     virtual ~Game();
     virtual void setup() = 0;
-    virtual void process() {}
+    virtual void update(sf::Time dt);
+    virtual int processHitTile(Tile* ptrTile, int ballNo = 0) = 0;
 
     // getters
     Game::GameStatus getStatus() const;
@@ -39,6 +40,7 @@ public:
     bool ball2IsActive() const;
     float ballHeight(int ballNo = 0) const;
     float ballXPosition(int ballNo = 0) const;
+    bool ball2LeavesInnerRect() const;
 
     // non-const accessors
     sf::RectangleShape& getGameWindow();
@@ -47,9 +49,11 @@ public:
     sf::Text& getScoreText();
     sf::Text& getBallsLeftText();
     Paddle* getPaddle();
-    Ball* getBall(int ballNo = 0);
+    Ball*& getBall(int ballNo = 0);
+    float getBallSpeed(int ballNo = 0);
     Tiles* getTiles();
 
+    void updateBall2(sf::Time dt);
     void drawBallsLeft();
     void drawHighScores();
     void incrementScore(int value = 1);
@@ -61,7 +65,6 @@ public:
     bool paddleMissesBall(int ballNo = 0);
     bool paddleHitsWall();
     void drawGameObjects();
-    bool ball2LeavesInnerRect();
     void setBall2StatusActive ();
     void move2BallsToStartPosition();
 protected:
