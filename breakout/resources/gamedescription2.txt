@@ -2,7 +2,7 @@ ONE RED TILE
 
 The goal of this game is to hit the red tile.  You are allow only 60 seconds to 
 complete the task.  The red tile is worth 100 points.  All other tiles are worth
-only one point.  The ball moves pretty fast, but you be allotted 5 balls to complete
+only one point.  The ball moves pretty fast, but you be allotted 6 balls to complete
 the game.
 
 Good luck
