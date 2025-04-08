@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <SFML/Graphics.hpp>
+#include "SoundEffect.h"
 #include "Tiles.h"
 #include "Ball.h"
 #include "Paddle.h"
@@ -40,7 +41,6 @@ public:
     bool ball2IsActive() const;
     float ballHeight(int ballNo = 0) const;
     float ballXPosition(int ballNo = 0) const;
-    bool ball2LeavesInnerRect() const;
 
     // non-const accessors
     sf::RectangleShape& getGameWindow();
@@ -54,6 +54,7 @@ public:
     Tiles* getTiles();
 
     void updateBall2(sf::Time dt);
+    bool ball2LeavesInnerRect();
     void drawBallsLeft();
     void drawHighScores();
     void incrementScore(int value = 1);
@@ -65,8 +66,10 @@ public:
     bool paddleMissesBall(int ballNo = 0);
     bool paddleHitsWall();
     void drawGameObjects();
-    void setBall2StatusActive ();
     void move2BallsToStartPosition();
+    void updateTimer();
+    void manageBall(SoundEffect& soundEffect, sf::Text& message);
+    //void manageBall();
 protected:
     sf::RenderWindow& window;
     GameStatus status = GameStatus::NotStarted;
@@ -88,6 +91,7 @@ protected:
     sf::Text scoreText;
     sf::Text ballsLeftText;
     sf::Text timeRemainingText;
+    sf::Clock timerClock;
     int LoopCounter = 0;
     Ball2Status ball2Status = Ball2Status::Inactive;
     sf::FloatRect innerRect;
