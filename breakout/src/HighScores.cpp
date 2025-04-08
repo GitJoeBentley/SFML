@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& out, const Score& obj)
 ////////////////  HighScores functions ////////////////////
 
 HighScores::HighScores(int gameNumber)
-    : filename(ResourcesPath + "highscores" + std::to_string(gameNumber) + ".bin"), highScoresFileExists(true)
+    : filename(ResourcePath + "highscores" + std::to_string(gameNumber) + ".bin"), highScoresFileExists(true)
 {
     std::ifstream fin(filename,std::ios_base::binary);
     if (!fin)

@@ -44,7 +44,7 @@ int main ()
 
     // Fonts
     sf::Font font;
-    font.loadFromFile(ResourcesPath + "Arial.ttf");
+    font.loadFromFile(ResourcePath + "Arial.ttf");
 
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Joe's Breakout Game", sf::Style::Close);
@@ -54,9 +54,7 @@ int main ()
 
     //GAME CLOCK & TIMER
     sf::Clock clock;
-    sf::Time dt;
     sf::Clock timerClock;
-    int timer = 0;
     int gameSelected;      // Player's choice of games
 
     // Texts
@@ -70,7 +68,7 @@ int main ()
     sf::Text message("", font);
     sf::Vector2f messagePos;
 
-    int tileValue = 0;
+    //int tileValue = 0;
 
     // Sound effects
     SoundEffect soundEffect;
@@ -79,10 +77,8 @@ int main ()
 
     sf::Event event;
 
-    //CrazyBall* crazyBallGame = nullptr;
-    TwoBalls* twoBalls = nullptr;
+    //TwoBalls* twoBalls = nullptr;
     Crusher* crusher = nullptr;
-    //FallingTiles* fallingTiles = nullptr;
 
     while (gameSelection != GameSelection::Exit)
     {
@@ -127,7 +123,7 @@ int main ()
             break;
         case 7:
             game = new TwoBalls(window);
-            twoBalls = dynamic_cast<TwoBalls*>(game);
+            //twoBalls = dynamic_cast<TwoBalls*>(game);
             break;
         case 8:
             game = new FallingTiles(window);
@@ -145,7 +141,7 @@ int main ()
         game->drawHighScores();
 
         //////////// The GAME loop
-        while (game->getStatus() == Game::GameStatus::NotStarted || game->getStatus() == Game::GameStatus::Active)
+        while (game && (game->getStatus() == Game::GameStatus::NotStarted || game->getStatus() == Game::GameStatus::Active))
         {
             if (joyStickConnected) sf::Joystick::update();
             while (window.pollEvent(event))
@@ -213,63 +209,14 @@ int main ()
             if (game->getStatus() == Game::GameStatus::Active)
             {
                 game->update(clock.restart());
-                if (gameSelected == 8 && game->getStatus() == Game::GameStatus::TileHitsPaddle) break;
-                if (gameSelected == 7 && game->getBall2Status() == Game::Ball2Status::Inactive && game->ball2LeavesInnerRect())
-                {
-                    soundEffect[SoundEffect::BallHitTile].play();
-                    game->getBall(1)->setFillColor(sf::Color::Magenta);
-                    game->setBall2StatusActive();
-                }
+                game->updateTimer();
 
                 window.clear();
                 game->drawGameObjects();
                 window.display();
 
-                // Out of time?
-                if (game->getTimeRemaining() != INT_MAX)
-                {
-                    timer = static_cast<int> (timerClock.getElapsedTime().asSeconds());
-                    if (timer > 0)
-                    {
-                        game->decrementTimeRemaining();
-                        timerClock.restart();
-                    }
-                    if (game->getTimeRemaining() == 0)
-                    {
-                        game->setStatus(Game::GameStatus::OutOfTime);
-                        break;
-                    }
-                }
+                game->manageBall(soundEffect, message);
 
-                // Ball hits a wall
-                if (game->getBall(0)->hitTheWall() || (gameSelected == 7 && game->getBall(1)->hitTheWall()))
-                {
-                    soundEffect[SoundEffect::BallHitWall].play();
-                }
-                // ball hits a tile
-                if ((tileValue = game->hitATile()) > 0 || (twoBalls && (tileValue = game->hitATile(1)) > 0))
-                {
-                    soundEffect[SoundEffect::BallHitTile].play();
-                    game->incrementScore(tileValue);
-                    //game->getBall()->update(dt);   // this is a hack to move the ball after a tile hit
-
-                    if (game->getNumTiles() == 0 or tileValue == 100)
-                    {
-                        game->setStatus(Game::GameStatus::Win);
-                        message.setCharacterSize(48);
-                        message.setFillColor(sf::Color(20,200,20));
-                        soundEffect[SoundEffect::EndOfGame].play();
-                        message.setString("     You win!!!!!!!!!!!!");
-                        window.clear();
-                        game->drawGameObjects();
-                        // Draw text and stuff outside of the game window
-                        drawCenteredText(message, window);
-                        window.display();
-                        sf::sleep(sf::Time(sf::seconds(5.0f)));
-                        break;
-                    }
-                    continue;
-                }
                 // Paddle hits wall
                 if (game->paddleHitsWall())
                 {
@@ -279,7 +226,6 @@ int main ()
                 else if (game->paddleHitsBall() || (gameSelected == 7 && game->paddleHitsBall(1)))
                 {
                     // Paddle hit the ball
-                    //game->getBall()->update(dt);
                     soundEffect[SoundEffect::PaddleHitBall].play();
                 }
                 // Paddle misses ball?
@@ -308,8 +254,10 @@ int main ()
                         sf::sleep(sf::Time(sf::seconds(3.0f)));
                         if (crusher) crusher->crush();
                         game->getPaddle()->moveToStartPosition();
-                        if (gameSelected == 7 && game->ball2IsActive()) game->move2BallsToStartPosition();
-                        else game->getBall()->moveToStartPosition();
+                        if (gameSelected == 7 && game->ball2IsActive())
+                            game->move2BallsToStartPosition();
+                        else
+                            game->getBall()->moveToStartPosition();
                         clock.restart();
                     }
                 }
@@ -378,7 +326,7 @@ int main ()
         }
 
         //crazyBallGame = nullptr;
-        twoBalls = nullptr;
+        //twoBalls = nullptr;
         crusher = nullptr;
         if (game) delete game;
         game = nullptr;
@@ -621,7 +569,7 @@ void displayGameDescription(size_t gameNumber, sf::RenderWindow& window, sf::Fon
     sf::Vector2u RenderWindowSize = window.getSize();
 
     const std::string digit = "0123456789";
-    const std::string filename = ResourcesPath + "gamedescription" + digit[gameNumber] + ".txt";
+    const std::string filename = ResourcePath + "gamedescription" + digit[gameNumber] + ".txt";
     std::string text, buffer;
 
     std::ifstream fin(filename.c_str());
@@ -675,6 +623,7 @@ bool buttonIsClicked(sf::RectangleShape& button, sf::Vector2f mousePosition)
     return rectangle.contains(mousePosition);
 }
 
+// Move to misc functions
 void drawCenteredText(sf::Text& text, sf::RenderWindow& window)
 {
     sf::FloatRect textRect = text.getLocalBounds();

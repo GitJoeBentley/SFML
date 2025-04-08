@@ -1,5 +1,4 @@
 #include <cstdint>
-#include "Game.h"
 #include "BasicGame.h"
 
 BasicGame::BasicGame(sf::RenderWindow& wnd) : Game(wnd, 1, 5)

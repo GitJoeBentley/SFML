@@ -3,14 +3,14 @@
 
 SoundEffect::SoundEffect()
 {
-    soundBuffer[PaddleHitWall].loadFromFile(ResourcesPath + "PaddleHitWall.wav");
-    soundBuffer[BallHitWall].loadFromFile(ResourcesPath + "BallHitWall.wav");
-    soundBuffer[BallHitTile].loadFromFile(ResourcesPath + "BallHitTile.wav");
-    soundBuffer[EndOfGame].loadFromFile(ResourcesPath + "EndOfGame.wav");
-    soundBuffer[PaddleMissBall+0].loadFromFile(ResourcesPath + "PaddleMissBall0.wav");
-    soundBuffer[PaddleMissBall+1].loadFromFile(ResourcesPath + "PaddleMissBall1.wav");
-    soundBuffer[PaddleMissBall+2].loadFromFile(ResourcesPath + "PaddleMissBall2.wav");
-    soundBuffer[PaddleMissBall+3].loadFromFile(ResourcesPath + "PaddleMissBall3.wav");
+    soundBuffer[PaddleHitWall].loadFromFile(ResourcePath + "PaddleHitWall.wav");
+    soundBuffer[BallHitWall].loadFromFile(ResourcePath + "BallHitWall.wav");
+    soundBuffer[BallHitTile].loadFromFile(ResourcePath + "BallHitTile.wav");
+    soundBuffer[EndOfGame].loadFromFile(ResourcePath + "EndOfGame.wav");
+    soundBuffer[PaddleMissBall+0].loadFromFile(ResourcePath + "PaddleMissBall0.wav");
+    soundBuffer[PaddleMissBall+1].loadFromFile(ResourcePath + "PaddleMissBall1.wav");
+    soundBuffer[PaddleMissBall+2].loadFromFile(ResourcePath + "PaddleMissBall2.wav");
+    soundBuffer[PaddleMissBall+3].loadFromFile(ResourcePath + "PaddleMissBall3.wav");
 
     sound[PaddleHitBall].setBuffer(soundBuffer[PaddleHitBall]);
     sound[PaddleHitWall].setBuffer(soundBuffer[PaddleHitWall]);

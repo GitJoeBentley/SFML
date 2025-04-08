@@ -3,6 +3,7 @@
 #include <sstream>
 using namespace std;
 
+//#include "SoundEffect.h"
 #include "Game.h"
 #include "proto.h"
 #include "RandomTiles.h"
@@ -18,7 +19,7 @@ Game::Game(sf::RenderWindow& wnd, int number, int balls, int time_remaining)
       timeRemainingText("", font, 24)
 {
     ball[1] = nullptr;
-    font.loadFromFile(ResourcesPath + "Arial.ttf");
+    font.loadFromFile(ResourcePath + "Arial.ttf");
     // Game Name Text
     gameNameText.setFont(font);
     gameNameText.setString(GameName[number]);
@@ -50,7 +51,7 @@ Game::Game(sf::RenderWindow& wnd, int number, int balls, int time_remaining)
     gameWindow.setOutlineColor(sf::Color::Blue);
     gameWindow.setOutlineThickness(20.0f);
     gameWindow.setPosition(GameBorderWidth,GameBorderWidth);
-    HSfont.loadFromFile(ResourcesPath + "CourierNew.ttf");
+    HSfont.loadFromFile(ResourcePath + "CourierNew.ttf");
     static std::ostringstream sout;
     sout.str("");
     sout << *highScores;
@@ -208,20 +209,28 @@ void Game::setStatus(Game::GameStatus status_)
     status = status_;
 }
 
-void Game::setBall2StatusActive ()
-{
-    ball2Status = Ball2Status::Active;
-}
-
 void Game::decrementTimeRemaining()
 {
     timeRemaining--;
+    if (timeRemaining == 0) status = GameStatus::OutOfTime;
 }
 
 void Game::update(sf::Time dt)
 {
     paddle->update(dt);
     ball[0]->update(dt);
+}
+
+void Game::updateTimer()
+{
+    if (timeRemaining != INT_MAX)
+    {
+        if (timerClock.getElapsedTime().asSeconds() >= 1.0f)
+        {
+            decrementTimeRemaining();
+            timerClock.restart();
+        }
+    }
 }
 
 void Game::updateBall2(sf::Time dt)
@@ -240,9 +249,44 @@ void Game::updateBall2(sf::Time dt)
     {
         ball[1]->setPosition(sf::Vector2f(ball2Position.x + speed * dt.asSeconds() * std::sin(RPD*angle), ball2Position.y + speed * dt.asSeconds() * std::cos(RPD*angle)));
     }
+    if (ball2LeavesInnerRect())
+    {
+        ball[1]->setFillColor(sf::Color::Magenta);
+        ball2Status = Ball2Status::Active;
+    }
 }
 
-// return -1 is no contact
+void Game::manageBall(SoundEffect& soundEffect, sf::Text& message)
+{
+    int tileValue;
+    // Ball hits a wall
+    if (ball[0]->hitTheWall() || (gameNumber == 7 && ball[1]->hitTheWall()))
+    {
+        soundEffect[SoundEffect::BallHitWall].play();
+    }
+    // ball hits a tile
+    if ((tileValue = hitATile()) > 0 || (gameNumber == 7 && (tileValue = hitATile(1)) > 0))
+    {
+        soundEffect[SoundEffect::BallHitTile].play();
+        incrementScore(tileValue);
+
+        if (numTiles == 0 or tileValue == 100)
+        {
+            status = Game::GameStatus::Win;
+            message.setCharacterSize(48);
+            message.setFillColor(sf::Color(20,200,20));
+            soundEffect[SoundEffect::EndOfGame].play();
+            message.setString("     You win!!!!!!!!!!!!");
+            window.clear();
+            drawGameObjects();
+            drawCenteredText(message, window);
+            window.display();
+            sf::sleep(sf::Time(sf::seconds(5.0f)));
+        }
+    }
+}
+
+
 int Game::hitATile(int ballNo)
 {
     static int LoopCounter = 0;
@@ -421,7 +465,7 @@ float Game::leftSideOfWindow() const
     return rect.left;
 }
 
-bool Game::ball2LeavesInnerRect() const
+bool Game::ball2LeavesInnerRect()
 {
     float ballXPos = ball[1]->getPosition().x;
     float ballYPos = ball[1]->getPosition().y;
