@@ -69,7 +69,7 @@ public:
     void move2BallsToStartPosition();
     void updateTimer();
     void manageBall(SoundEffect& soundEffect, sf::Text& message);
-    //void manageBall();
+    void managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& clock);
 protected:
     sf::RenderWindow& window;
     GameStatus status = GameStatus::NotStarted;
