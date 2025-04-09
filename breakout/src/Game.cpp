@@ -276,16 +276,62 @@ void Game::manageBall(SoundEffect& soundEffect, sf::Text& message)
             message.setCharacterSize(48);
             message.setFillColor(sf::Color(20,200,20));
             soundEffect[SoundEffect::EndOfGame].play();
-            message.setString("     You win!!!!!!!!!!!!");
-            window.clear();
-            drawGameObjects();
-            drawCenteredText(message, window);
-            window.display();
-            sf::sleep(sf::Time(sf::seconds(5.0f)));
+            //message.setString("     You win!!!!!!!!!!!!");
+            //window.clear();
+            //drawGameObjects();
+            //drawCenteredText(message, window);
+            //window.display();
+            //sf::sleep(sf::Time(sf::seconds(5.0f)));
         }
     }
 }
 
+void Game::managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& clock)
+{
+    // Paddle hits wall
+    if (paddleHitsWall())
+    {
+        soundEffect[SoundEffect::PaddleHitWall].play();
+    }
+    // Paddle hits ball?
+    else if (paddleHitsBall() || (gameNumber == 7 && paddleHitsBall(1)))
+    {
+        soundEffect[SoundEffect::PaddleHitBall].play();
+    }
+    // Paddle misses ball?
+    else if (paddleMissesBall() || (gameNumber == 7 && paddleMissesBall(1)))
+    {
+        if (getNumBalls() == 0)
+        {
+            message.setCharacterSize(48);
+            message.setFillColor(sf::Color(210,20,20));
+            message.setStyle(sf::Text::Bold);
+            soundEffect[SoundEffect::EndOfGame].play();
+            status = GameStatus::OutOfBalls;
+        }
+        else
+        {
+            message.setCharacterSize(36);
+            message.setFillColor(sf::Color(10,220,50));
+            message.setString(std::to_string(numBalls) + " ball" + (numBalls > 1 ? "s" : "") + " to go.  Get ready ...");
+            decrementNumBalls();
+            soundEffect[static_cast<SoundEffect::SoundType>(SoundEffect::PaddleMissBall + (rand()%4))].play();
+            drawGameObjects();
+            drawCenteredText(message, window);
+            window.draw(ballsLeftText);
+            window.display();
+
+            if (gameNumber == 4) dynamic_cast<Crusher*>(this)->crush();   // Crusher
+            paddle->moveToStartPosition();
+            if (gameNumber == 7 && ball2Status == Ball2Status::Active)    // Two Balls
+                move2BallsToStartPosition();
+            else
+                ball[0]->moveToStartPosition();
+            sf::sleep(sf::Time(sf::seconds(3.0f)));
+            clock.restart();
+        }
+    }
+}
 
 int Game::hitATile(int ballNo)
 {

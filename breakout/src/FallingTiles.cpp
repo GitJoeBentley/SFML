@@ -46,7 +46,6 @@ void FallingTiles::update(sf::Time dt)
 int FallingTiles::processHitTile(Tile* ptrTile, int)
 {
     int tileValue = 1;
-    std::cout<<"FallingTiles::processHitTile()"<< std::endl;
     auto it = findTile(ptrTile);
     if (it != fallingTiles.end())
     {

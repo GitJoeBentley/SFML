@@ -2,7 +2,7 @@
 
 const sf::Color Tiles150::Color[7] = { Red, Orange, Yellow, Green, Blue};
 
-Tiles150::Tiles150(sf::RenderWindow& wnd) : Game(wnd, 9)
+Tiles150::Tiles150(sf::RenderWindow& wnd) : Game(wnd, 9, 7, 75)
 {
     setup();
 }
@@ -11,8 +11,7 @@ void Tiles150::setup()
 {
     int tileRows = 12;
     int tileCols = 10;  // There will never be more than 120 tiles up
-    //ball[0] = new Ball(9.0f);  // radius = 9, speed = 600.f
-    ball[0] = new Ball(9.0f);  // radius = 9, speed = 500.f
+    ball[0] = new Ball(9.0f, 550.f);  // radius = 9, speed = 550.f
     paddle = new Paddle;
     tiles = new Tiles(tileRows, tileCols);
     numTiles = tileRows * tileCols;

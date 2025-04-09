@@ -12,7 +12,7 @@ TextBox::TextBox(const std::string& str, sf::Font& font, unsigned int textSize, 
     setPosition(pos);
     setSize(sf::Vector2f(1.1f * textRect.width, 1.2f * textRect.height));
     setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-    setOutlineColor(Indigo);
+    setOutlineColor(Blue);
     setOutlineThickness(4.0f);
     setFillColor(sf::Color::Black);
 }

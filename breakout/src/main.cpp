@@ -35,6 +35,8 @@ using std::endl;
 using sf::Keyboard;
 
 sf::Text* Title;
+void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick, bool joyStickConnected);
+
 
 int main ()
 {
@@ -68,17 +70,10 @@ int main ()
     sf::Text message("", font);
     sf::Vector2f messagePos;
 
-    //int tileValue = 0;
-
     // Sound effects
     SoundEffect soundEffect;
 
     sf::Vector2f joystick = sf::Vector2f(0.f,0.f);
-
-    sf::Event event;
-
-    //TwoBalls* twoBalls = nullptr;
-    Crusher* crusher = nullptr;
 
     while (gameSelection != GameSelection::Exit)
     {
@@ -109,11 +104,9 @@ int main ()
             break;
         case 3:
             game = new CrazyBall(window);
-            //crazyBallGame = dynamic_cast<CrazyBall*>(game);
             break;
         case 4:
             game = new Crusher(window);
-            crusher = dynamic_cast<Crusher*>(game);
             break;
         case 5:
             game = new Rainbow(window);
@@ -123,15 +116,12 @@ int main ()
             break;
         case 7:
             game = new TwoBalls(window);
-            //twoBalls = dynamic_cast<TwoBalls*>(game);
             break;
         case 8:
             game = new FallingTiles(window);
-            //fallingTiles = dynamic_cast<FallingTiles*>(game);
             break;
         case 9:
             game = new Tiles150(window);
-            //tiles150 = dynamic_cast<Tiles150*>(game);
             break;
         default:
             ;
@@ -144,128 +134,15 @@ int main ()
         while (game && (game->getStatus() == Game::GameStatus::NotStarted || game->getStatus() == Game::GameStatus::Active))
         {
             if (joyStickConnected) sf::Joystick::update();
-            while (window.pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                {
-                    game->setStatus(Game::GameStatus::Quit);
-                    window.close();
-                    break;
-                }
-                if (Keyboard::isKeyPressed(Keyboard::Escape))
-                {
-                    game->setStatus(Game::GameStatus::Quit);
-                    window.close();
-                    break;
-                }
-
-                if (Keyboard::isKeyPressed(Keyboard::X)) window.close();
-                if (Keyboard::isKeyPressed(Keyboard::P))
-                {
-                    if (game->getStatus() == Game::GameStatus::Paused)
-                    {
-                        game->setStatus(Game::GameStatus::Active);
-                        break;
-                    }
-                    else
-                    {
-                        game->setStatus(Game::GameStatus::Paused);
-                        break;
-                    }
-                }
-
-                if (game->getStatus() == Game::GameStatus::NotStarted && (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0,7)))
-                {
-                    game->setStatus(Game::GameStatus::Active);
-                    clock.restart();
-                    game->decrementNumBalls();
-                    break;
-                }
-
-                if (joyStickConnected)
-                {
-                    joystick = sf::Vector2f(sf::Joystick::getAxisPosition(0, sf::Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
-                }
-
-                // Handle the pressing and releasing of the arrow keys
-                if (Keyboard::isKeyPressed(Keyboard::Left) || joystick.x < -15.f)
-                {
-                    game->getPaddle()->move(Paddle::Left);
-                }
-                else if (Keyboard::isKeyPressed(Keyboard::Right) || joystick.x > 15.f)
-                {
-                    game->getPaddle()->move(Paddle::Right);
-                }
-                else
-                {
-                    game->getPaddle()->stop();
-                }
-                if (sf::Joystick::isButtonPressed(0,7)) game->setStatus(Game::GameStatus::Active);
-                else if (sf::Joystick::isButtonPressed(0,0)) game->setStatus(Game::GameStatus::GameOver);
-                else {};
-            }   // end of the poll event loop
+            pollEvent(window, clock, game, joystick, joyStickConnected);
 
             // Start of Active Game loop
             if (game->getStatus() == Game::GameStatus::Active)
             {
                 game->update(clock.restart());
                 game->updateTimer();
-
-                window.clear();
-                game->drawGameObjects();
-                window.display();
-
                 game->manageBall(soundEffect, message);
-
-                // Paddle hits wall
-                if (game->paddleHitsWall())
-                {
-                    soundEffect[SoundEffect::PaddleHitWall].play();
-                }
-                // Paddle hits ball?
-                else if (game->paddleHitsBall() || (gameSelected == 7 && game->paddleHitsBall(1)))
-                {
-                    // Paddle hit the ball
-                    soundEffect[SoundEffect::PaddleHitBall].play();
-                }
-                // Paddle misses ball?
-                else if (game->paddleMissesBall() || (gameSelected == 7 && game->paddleMissesBall(1)))
-                {
-                    if (game->getNumBalls() == 0)
-                    {
-                        message.setCharacterSize(48);
-                        message.setFillColor(sf::Color(210,20,20));
-                        message.setStyle(sf::Text::Bold);
-                        soundEffect[SoundEffect::EndOfGame].play();
-                        game->setStatus(Game::GameStatus::OutOfBalls);
-                        break;
-                    }
-                    else
-                    {
-                        message.setCharacterSize(36);
-                        message.setFillColor(sf::Color(10,220,50));
-                        message.setString(std::to_string(game->getNumBalls()) + " ball" + (game->getNumBalls() > 1 ? "s" : "") + " to go.  Get ready ...");
-                        game->decrementNumBalls();
-                        soundEffect[static_cast<SoundEffect::SoundType>(SoundEffect::PaddleMissBall + (rand()%4))].play();
-                        game->drawGameObjects();
-                        drawCenteredText(message, window);
-                        window.draw(game->getBallsLeftText());
-                        window.display();
-                        sf::sleep(sf::Time(sf::seconds(3.0f)));
-                        if (crusher) crusher->crush();
-                        game->getPaddle()->moveToStartPosition();
-                        if (gameSelected == 7 && game->ball2IsActive())
-                            game->move2BallsToStartPosition();
-                        else
-                            game->getBall()->moveToStartPosition();
-                        clock.restart();
-                    }
-                }
-                // No contact with ball or paddle
-                else
-                {
-                }
-
+                game->managePaddle(soundEffect, message, clock);
             } // End of if Active game
 
             window.clear();
@@ -281,37 +158,35 @@ int main ()
         TextBox* tb;
         std::string statement;
         bool hasAHighScore = false;
+        switch (game->getStatus())
+        {
+        case Game::GameStatus::Quit:
+            statement = "\n               OK ... Bye Bye            \n";
+            break;
+        case Game::GameStatus::OutOfTime:
+            statement = "\n                  Out of Time\n";
+            break;
+        case Game::GameStatus::OutOfBalls:
+            statement = "\n                  Out of Balls\n";
+            break;
+        case Game::GameStatus::TileHitsPaddle:
+            statement = "\nA falling tile hit the paddle\n";
+            break;
+        case Game::GameStatus::Win:
+            statement = "\n               You win!!!!!!!!!!!!\n";
+        default:
+            ;
+        }
 
         // Record Game Score to High Scores?
-        if (game->getHighScores()->eligible(game->getScore()))
+        if (game->getScore() && game->getHighScores()->eligible(game->getScore()))
         {
             hasAHighScore = true;
             if (game->getScore() > game->getHighScores()->getHightestScore())
-                statement = "             Congratulations!!!\n    You have the highest score!!!";
-            else statement = "             Congratulations!!!\n     You made the leader board  ";
+                statement += "\n             Congratulations!!!\n    You have the highest score!!!\n";
+            else statement += "\n             Congratulations!!!\n     You made the leader board  \n";
         }
-        else
-        {
-            switch (game->getStatus())
-            {
-            case Game::GameStatus::Quit:
-                statement = "OK ... Bye Bye";
-                break;
-            case Game::GameStatus::OutOfTime:
-                statement = "      Out of Time\n       You Lose";
-                break;
-            case Game::GameStatus::OutOfBalls:
-                statement = "      Out of Balls\n      You Lose";
-                break;
-            case Game::GameStatus::TileHitsPaddle:
-                statement = "A falling tile hit the paddle\n         You Lose";
-                break;
-            case Game::GameStatus::Win:
-                statement = "\n     You win!!!!!!!!!!!!\n";
-            default:
-                ;
-            }
-        }
+
         game->drawGameObjects();
         tb = new TextBox(statement, font, 30, sf::Color::Magenta,game->centerOfGameWindow());
         tb->drawTB(window);
@@ -325,9 +200,6 @@ int main ()
             game->getHighScores()->WriteHighScoresFile();
         }
 
-        //crazyBallGame = nullptr;
-        //twoBalls = nullptr;
-        crusher = nullptr;
         if (game) delete game;
         game = nullptr;
 
@@ -691,4 +563,63 @@ int getColorIndex(sf::Color color)
     for (int i = 0; i < 7; i++)
         if (color == RainbowColor[i]) return i;
     return -1;
+}
+
+void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick, bool joyStickConnected)
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+        {
+            game->setStatus(Game::GameStatus::Quit);
+            return;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Escape) || Keyboard::isKeyPressed(Keyboard::Q) || sf::Joystick::isButtonPressed(0,0))
+        {
+            game->setStatus(Game::GameStatus::Quit);
+            return;
+        }
+
+        if (Keyboard::isKeyPressed(Keyboard::P))
+        {
+            if (game->getStatus() == Game::GameStatus::Paused)
+            {
+                game->setStatus(Game::GameStatus::Active);
+                return;
+            }
+            else
+            {
+                game->setStatus(Game::GameStatus::Paused);
+                return;
+            }
+        }
+
+        if (game->getStatus() == Game::GameStatus::NotStarted && (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0,7)))
+        {
+            game->setStatus(Game::GameStatus::Active);
+            clock.restart();
+            game->decrementNumBalls();
+            return;
+        }
+
+        if (joyStickConnected)
+        {
+            joystick = sf::Vector2f(sf::Joystick::getAxisPosition(0, sf::Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+        }
+
+        // Handle the pressing and releasing of the arrow keys
+        if (Keyboard::isKeyPressed(Keyboard::Left) || joystick.x < -15.f)
+        {
+            game->getPaddle()->move(Paddle::Left);
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::Right) || joystick.x > 15.f)
+        {
+            game->getPaddle()->move(Paddle::Right);
+        }
+        else
+        {
+            game->getPaddle()->stop();
+        }
+    }   // end of the poll event loop
 }
