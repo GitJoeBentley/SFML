@@ -68,7 +68,7 @@ public:
     void drawGameObjects();
     void move2BallsToStartPosition();
     void updateTimer();
-    void manageBall(SoundEffect& soundEffect, sf::Text& message);
+    void manageBall(SoundEffect& soundEffect);
     void managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& clock);
 protected:
     sf::RenderWindow& window;

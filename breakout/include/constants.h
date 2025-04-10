@@ -14,7 +14,7 @@ const sf::Color Orange = sf::Color(0xffa500ff);
 const sf::Color Yellow = sf::Color(0xfaeb36ff);
 const sf::Color Green = sf::Color(0x09ff09ff);
 const sf::Color Blue = sf::Color(0x080dffff);
-const sf::Color Indigo = sf::Color(0x4b369dff);
+const sf::Color Indigo = sf::Color(0x5b46adff);
 const sf::Color Violet = sf::Color(0xa349a4ff);
 const sf::Color RainbowColor[7] = {Red, Orange, Yellow, Green, Blue, Indigo, Violet};
 
