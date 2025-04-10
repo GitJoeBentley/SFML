@@ -11,7 +11,7 @@ void Tiles150::setup()
 {
     int tileRows = 12;
     int tileCols = 10;  // There will never be more than 120 tiles up
-    ball[0] = new Ball(9.0f, 550.f);  // radius = 9, speed = 550.f
+    ball[0] = new Ball(9.0f, 500.f);  // radius = 9, speed = 500.f
     paddle = new Paddle;
     tiles = new Tiles(tileRows, tileCols);
     numTiles = tileRows * tileCols;

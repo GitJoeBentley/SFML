@@ -9,21 +9,46 @@ RandomTiles::RandomTiles(sf::RenderWindow& wnd) : Game(wnd, 6, 7, 70)
 
 void RandomTiles::setup()
 {
-    int tileRows = 10;
-    int tileCols = 15;
+    int tileRows = 9;
+    int tileCols = 16;
     float tileWidth = 48.0f;
     ball[0] = new Ball(9.0f, 600.0f);  // radius = 9, speed = 600
     tiles = new Tiles(tileRows, tileCols, tileWidth);      // 10 rows, 15 columns, tile size 48x16
     numTiles = tileRows * tileCols;
     paddle = new Paddle;   // paddle width = 64
+    sf::Vector2f tilePos;
+    sf::Vector2f tileSize;
     for (int row = 0; row < tileRows; row++)
     {
-        for (int col = 0; col < tileCols; col++)
+        if (row % 2)
         {
-            tiles->getTile(row, col)->setFillColor(RainbowColor[rand() % 7]);
+            for (int col = 0; col < tileCols -1; col++)
+            {
+                tiles->getTile(row, col)->setFillColor(RainbowColor[rand() % 7]);
+            }
+            tiles->removeTile(row,tileCols -1);
+        }
+        else
+        {
+            for (int col = 0; col < tileCols; col++)
+            {
+                tiles->getTile(row, col)->setFillColor(RainbowColor[rand() % 7]);
+                tilePos = tiles->getTile(row, col)->getPosition();
+                tilePos.x -= tileWidth / 2.f;
+                tiles->getTile(row, col)->setPosition(tilePos);
+
+            }
+            tileSize = tiles->getTile(row, 0)->getSize();
+            tileSize.x = tileWidth / 2.0f - 2.0f;
+            tiles->getTile(row, 0)-> setSize(tileSize);
+            tiles->getTile(row, tileCols -1)-> setSize(tileSize);
+            tilePos = tiles->getTile(row, 0)->getPosition();
+            tilePos.x += tileWidth / 2.f;
+            tiles->getTile(row, 0)->setPosition(tilePos);
         }
     }
 }
+
 
 int RandomTiles::processHitTile(Tile* ptrTile, int)
 {

@@ -256,7 +256,7 @@ void Game::updateBall2(sf::Time dt)
     }
 }
 
-void Game::manageBall(SoundEffect& soundEffect, sf::Text& message)
+void Game::manageBall(SoundEffect& soundEffect)
 {
     int tileValue;
     // Ball hits a wall
@@ -269,20 +269,6 @@ void Game::manageBall(SoundEffect& soundEffect, sf::Text& message)
     {
         soundEffect[SoundEffect::BallHitTile].play();
         incrementScore(tileValue);
-
-        if (numTiles == 0 or tileValue == 100)
-        {
-            status = Game::GameStatus::Win;
-            message.setCharacterSize(48);
-            message.setFillColor(sf::Color(20,200,20));
-            soundEffect[SoundEffect::EndOfGame].play();
-            //message.setString("     You win!!!!!!!!!!!!");
-            //window.clear();
-            //drawGameObjects();
-            //drawCenteredText(message, window);
-            //window.display();
-            //sf::sleep(sf::Time(sf::seconds(5.0f)));
-        }
     }
 }
 
@@ -301,12 +287,12 @@ void Game::managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& 
     // Paddle misses ball?
     else if (paddleMissesBall() || (gameNumber == 7 && paddleMissesBall(1)))
     {
-        if (getNumBalls() == 0)
+        if (numBalls == 0)
         {
-            message.setCharacterSize(48);
-            message.setFillColor(sf::Color(210,20,20));
-            message.setStyle(sf::Text::Bold);
-            soundEffect[SoundEffect::EndOfGame].play();
+            //message.setCharacterSize(48);
+            //message.setFillColor(sf::Color(210,20,20));
+            //message.setStyle(sf::Text::Bold);
+            //soundEffect[SoundEffect::EndOfGame].play();
             status = GameStatus::OutOfBalls;
         }
         else
@@ -345,6 +331,7 @@ int Game::hitATile(int ballNo)
 
     Tile* tilePtr = nullptr;
     float angle;
+    int tileValue;
 
     for (int row = 0; row < tiles->getNumRows(); row++)
     {
@@ -384,7 +371,9 @@ int Game::hitATile(int ballNo)
 
             if (hit)    // Ball has hit a tile
             {
-                return processHitTile(tilePtr, ballNo);
+                tileValue = processHitTile(tilePtr, ballNo);
+                if (numTiles == 0 or tileValue == 100) status = Game::GameStatus::Win;
+                return tileValue;
             }
         }
     }
@@ -442,19 +431,17 @@ void Game::drawGameObjects()
 
 bool Game::paddleHitsBall(int ballNo)
 {
+    float upperPaddleYPos = paddle->getPosition().y - paddle->getSize().y / 4.0f;
     if (ball[ballNo]->getDirection() == Ball::Direction::Up) return false;
-    if (ball[ballNo]->bottom() < paddle->getPosition().y) return false;
-    if ((paddle->left() - ball[ballNo]->right() < 1.0f) && (ball[ballNo]->left() - paddle->right() < 1.0f))
+    //if (ball[ballNo]->bottom() < paddle->getPosition().y) return false;
+    if (ball[ballNo]->bottom() < upperPaddleYPos) return false;
+    if ((paddle->left() - ball[ballNo]->right() < 0.5f) && (ball[ballNo]->left() - paddle->right() < 0.5f))
     {
-        float adjustment;
+        float adjustment = rand() % 7 - 3.0f;
         float diff = ball[ballNo]->getPosition().x - paddle->getPosition().x;
-        float pct = fabs(diff / (paddle->getSize().x / 2));
-
-        float newangle;
-
-        if (pct < 0.6f) adjustment = static_cast<float>(rand() % 9 - 4);
-        else adjustment = pct/4.f * ball[ballNo]->getAngle();
-        newangle = ball[ballNo]->getAngle() + adjustment;
+        float pct = diff / (paddle->getSize().x / 2);
+        float currentAngle = ball[ballNo]->getAngle();
+        float newangle = currentAngle + pct * 10.0 + adjustment;
         if (newangle > 70) newangle = 70;
         if (newangle < -70) newangle = -70;
         ball[ballNo]->setAngle(newangle);
@@ -473,8 +460,9 @@ bool Game::paddleMissesBall(int ballNo)
         {
             Rainbow* rainbowPtr = dynamic_cast<Rainbow*>(this);
             rainbowPtr -> decrementColor();
-            ball[ballNo]->speedUp();     // 5%
+            ball[ballNo]->speedUp();      // 5%
         }
+        else ball[ballNo]->speedUp(1.0);  // 1%
 
         return true;
     }
