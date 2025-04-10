@@ -1,2 +1,1 @@
-These are the latest versions ofthe Hidden maze game.  
-Opening Music by Manuel Graf M.Sc. Media Informatics  Munich, Germany
+These are the latest versions ofthe SFML/C++ games
