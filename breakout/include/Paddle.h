@@ -6,27 +6,28 @@
 #include <SFML/Graphics.hpp>
 #include "Ball.h"
 
-extern const float WallWidth;
+//extern const float WallWidth;
 
 
 class Paddle : public sf::RectangleShape
 {
 public:
     enum Direction {Right, Left, Stopped};
+
     Paddle(float width = 64.0f);
 
-    void move(Direction dir);
-    void stop();
-    void move(Direction dir, float distance);
-    void moveToStartPosition();
-
+    // getters
     float top() const;
-    void update(sf::Time dt);
     float left() const;
     float right() const;
-    void setWidth(float width);
     float getWidth() const;
 
+    void setWidth(float width);
+    void move(Direction dir);
+    void move(Direction dir, float distance);
+    void moveToStartPosition();
+    void stop();
+    void update(sf::Time dt);
 private:
     Direction direction;
 };
