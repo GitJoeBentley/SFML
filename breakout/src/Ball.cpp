@@ -149,7 +149,6 @@ bool Ball::hitTheWall()
 void Ball::update(sf::Time dt)
 {
     const float RPD = 0.0174533f;   // Radians Per Degree
-
     if (direction == Direction::Up)
     {
         setPosition(sf::Vector2f(getPosition().x + speed * dt.asSeconds() * std::sin(RPD*angle), getPosition().y - speed * dt.asSeconds() *std::cos(RPD*angle)));

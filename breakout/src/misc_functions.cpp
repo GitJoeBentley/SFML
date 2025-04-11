@@ -3,12 +3,13 @@
 #include "Message.h"
 #include "ButtonBox.h"
 #include "proto.h"
+#include "Animation.h"
 
 void displayGameDescription(size_t gameNumber, sf::RenderWindow& window, sf::Font& font)
 {
     sf::Vector2u RenderWindowSize = window.getSize();
 
-    const std::string digit = "0123456789";
+    const std::string digit = "0123456789D";
     const std::string filename = ResourcePath + "gamedescription" + digit[gameNumber] + ".txt";
     std::string text, buffer;
 
@@ -278,7 +279,8 @@ GameSelection playAgain(sf::RenderWindow& window, sf::Font& font, sf::Text* titl
 
     std::vector<std::string> buttonLabels = {"Same Game", "New Game","Exit"};
     size_t numButtons = buttonLabels.size();
-    ButtonBox buttonBox(window, buttonLabels, "        Do you want to play\nthe same game or a new game?", font, 24 );
+    // ButtonBox buttonBox(window, buttonLabels, "        Do you want to play\nthe same game or a new game?", font, 24 );
+    ButtonBox buttonBox(window, buttonLabels, font, 24 );
     sf::FloatRect* butRect = new sf::FloatRect[numButtons];
     for (size_t i = 0; i < numButtons; i++)
         butRect[i] = buttonBox.getButton(i)->getGlobalBounds();
@@ -318,13 +320,6 @@ GameSelection playAgain(sf::RenderWindow& window, sf::Font& font, sf::Text* titl
                             butRect = nullptr;
                             return choice[i];
                         }
-                        else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-                        {
-                            saveMousePos = mouse.getPosition();
-                            displayGameDescription(i, window, font);
-                            mouse.setPosition(saveMousePos);
-                            break;
-                        }
                     }
                 }
 
@@ -355,15 +350,28 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
     sf::Sound ticSound;
     ticSound.setBuffer(ticBuffer);
     ticSound.setVolume(100.0f);
+    sf::Clock clock;
+    sf::Time dt;
 
     size_t numButtons = GameName.size();
-    ButtonBox buttonBox(window, GameName, "         Click on the game you want to play\nRight-mouse click for a description of the game", font, 20 );
+    ButtonBox buttonBox(window, GameName, font, 20 );
+    // ButtonBox buttonBox(window, GameName, "         Click on the game you want to play\nRight-mouse click for a description of the game", font, 20 );
     sf::FloatRect* butRect = new sf::FloatRect[numButtons];
     for (size_t i = 0; i < numButtons; i++)
         butRect[i] = buttonBox.getButton(i)->getGlobalBounds();
 
+    sf::Vector2f buttonBoxUpperLeft = buttonBox.getUpperLeftCorner();
+    Animation** animation = new Animation*[10];
+    for (int i = 0; i < 5; i++)
+    {
+        animation[i] = new Animation(sf::Vector2f(buttonBoxUpperLeft.x - 360.f, buttonBoxUpperLeft.y + i * 142.0f));
+        animation[i + 5] = new Animation(sf::Vector2f(buttonBoxUpperLeft.x + buttonBox.getBoxSize().x + 40.f, buttonBoxUpperLeft.y + i * 142.0f));
+    }
+
     while (window.isOpen())
     {
+        dt = clock.restart();
+
         while (window.pollEvent(event))
         {
             mousePosI = mouse.getPosition(window);
@@ -393,6 +401,14 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
                         ticSound.play();
                         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                         {
+
+                            if (i == numButtons - 1)
+                            {
+                                saveMousePos = mouse.getPosition();
+                                displayGameDescription(i, window, font);
+                                mouse.setPosition(saveMousePos);
+                                break;
+                            }
                             delete [] butRect;
                             butRect = nullptr;
                             return i;
@@ -411,9 +427,16 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
                 ;
             }
         }
+        // process animations
+        for (int i = 0; i < 10; i++) {
+            animation[i]->update(dt);
+            animation[i]->hitATile();
+        }
         window.clear();
+
         window.draw(*title);
         buttonBox.draw();
+        for (int i = 0; i < 10; i++) animation[i]->draw(window);
         window.display();
     }
 

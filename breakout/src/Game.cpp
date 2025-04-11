@@ -289,10 +289,6 @@ void Game::managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& 
     {
         if (numBalls == 0)
         {
-            //message.setCharacterSize(48);
-            //message.setFillColor(sf::Color(210,20,20));
-            //message.setStyle(sf::Text::Bold);
-            //soundEffect[SoundEffect::EndOfGame].play();
             status = GameStatus::OutOfBalls;
         }
         else

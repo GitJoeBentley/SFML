@@ -37,6 +37,7 @@ void Button::normal()
 
 void Button::setColor(sf::Color buttColor, sf::Color textColor)
 {
+    color = buttColor;
     setFillColor(buttColor);
     text.setFillColor(textColor);
     setOutlineColor(sf::Color::Red);
