@@ -279,7 +279,6 @@ GameSelection playAgain(sf::RenderWindow& window, sf::Font& font, sf::Text* titl
 
     std::vector<std::string> buttonLabels = {"Same Game", "New Game","Exit"};
     size_t numButtons = buttonLabels.size();
-    // ButtonBox buttonBox(window, buttonLabels, "        Do you want to play\nthe same game or a new game?", font, 24 );
     ButtonBox buttonBox(window, buttonLabels, font, 24 );
     sf::FloatRect* butRect = new sf::FloatRect[numButtons];
     for (size_t i = 0; i < numButtons; i++)
@@ -355,7 +354,6 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
 
     size_t numButtons = GameName.size();
     ButtonBox buttonBox(window, GameName, font, 20 );
-    // ButtonBox buttonBox(window, GameName, "         Click on the game you want to play\nRight-mouse click for a description of the game", font, 20 );
     sf::FloatRect* butRect = new sf::FloatRect[numButtons];
     for (size_t i = 0; i < numButtons; i++)
         butRect[i] = buttonBox.getButton(i)->getGlobalBounds();
@@ -409,8 +407,16 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
                                 mouse.setPosition(saveMousePos);
                                 break;
                             }
+                            // Clean up before leaving
                             delete [] butRect;
                             butRect = nullptr;
+                            for (int i = 0; i < 10; i++) {
+                                delete animation[i];
+                                animation[i] = nullptr;
+                            }
+                            delete animation;
+                            animation = nullptr;
+
                             return i;
                         }
                         else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))

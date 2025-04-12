@@ -31,12 +31,7 @@ ButtonBox::ButtonBox(sf::RenderWindow& wdw, std::vector<std::string> buttonLabel
     {
         buttons[i] = new Button(buttonSize, sf::Vector2f(windowMiddle, windowTop + (i + 1.15f) *  buttonOffset), buttonLabels[i], font, textSize);
     }
-    buttons[numButtons - 1] -> setColor(Green, sf::Color::Black);
-
-    //msgText.setFillColor(sf::Color::Cyan);
-    //sf::FloatRect textRect = msgText.getLocalBounds();
-    //msgText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-    //msgText.setPosition(sf::Vector2f(windowMiddle, windowTop + (numButtons + 2.0f) *  buttonOffset));
+    buttons[numButtons - 1] -> setColor(Violet, sf::Color::Black);
 }
 
 sf::Vector2f ButtonBox::getBoxSize() const

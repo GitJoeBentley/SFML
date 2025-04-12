@@ -1,6 +1,6 @@
 #include "FallingTiles.h"
 
-FallingTiles::FallingTiles(sf::RenderWindow& wnd) : Game(wnd, 8)
+FallingTiles::FallingTiles(sf::RenderWindow& wnd) : Game(wnd, 8, 8, 80)
 {
     setup();
 }
@@ -52,7 +52,7 @@ int FallingTiles::processHitTile(Tile* ptrTile, int)
         fallingTiles.erase(it);
 
         // Speed the ball up
-        ball[0]->speedUp();     // 5%
+        ball[0]->speedUp(3);     // 5%
         tileValue = 10;
     }
     tiles->removeTile(ptrTile);

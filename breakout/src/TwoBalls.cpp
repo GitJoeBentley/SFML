@@ -3,7 +3,7 @@
 #include <iostream>
 #include "TwoBalls.h"
 
-TwoBalls::TwoBalls(sf::RenderWindow& wnd) : Game(wnd, 7, 7)
+TwoBalls::TwoBalls(sf::RenderWindow& wnd) : Game(wnd, 7, 10, 100)
 {
     setup();
 }

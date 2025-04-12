@@ -44,8 +44,8 @@ void Crusher::crush()
             }
         }
     }
-    // speed the ball up by 3%
-    ball[0]->speedUp(3.f);
+    // speed the ball up by 2%
+    ball[0]->speedUp(2.f);
 }
 
 int Crusher::processHitTile(Tile* ptrTile, int)

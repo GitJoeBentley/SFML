@@ -35,7 +35,7 @@ Game::Game(sf::RenderWindow& wnd, int number, int balls, int time_remaining)
     scoreText.setPosition(900.0f,140.0f);
 
     timeRemainingText.setFillColor(sf::Color(250,150,150));
-    timeRemainingText.setPosition(860.0f,300.0f);
+    timeRemainingText.setPosition(860.0f,325.0f);
 
     for (int i = 0; i < balls; i++)
     {
@@ -317,12 +317,12 @@ void Game::managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& 
 
 int Game::hitATile(int ballNo)
 {
-    static int LoopCounter = 0;
-    if (gameNumber == 6)
+    //static int LoopCounter = 0;
+    /*if (gameNumber == 6)
     {
         if (LoopCounter) LoopCounter--;
         else ball[ballNo]->setFillColor(Yellow);
-    }
+    }*/
     bool hit = false;
 
     Tile* tilePtr = nullptr;
@@ -420,6 +420,9 @@ void Game::drawGameObjects()
     drawBallsLeft();
     window.draw(gameWindow);
     window.draw(*paddle);               // draw paddle
+    // For the Random tile game, decrement LoopCounter, making ball invisible for awhile
+    if (LoopCounter > 0) LoopCounter--;
+    if (LoopCounter == 0) ball[0]->setFillColor(Yellow);
     window.draw(*ball[0]);
     if (ball[1]) window.draw(*ball[1]);
     tiles->draw(window);                  // draw tiles

@@ -65,14 +65,14 @@ void CrazyBall::update(sf::Time dt)
     case 1: // Change Ball speed
         changeSpeed(rand()%3);
         break;
-    case 2:
+    case 2:   // change ball angle
         if (ball[0]->getDirection() == Ball::Direction::Down && ball[0]->getPosition().y < gameWindowYPos)
         {
             ball[0]->setFillColor(Orange);
             ball[0]->setAngle(ball[0]->getAngle()/2.0f);
         }
         break;
-    case 3:
+    case 3:   // change position
         if (ball[0]->getDirection() == Ball::Direction::Down && ball[0]->getPosition().y < gameWindowYPos)
         {
             ball[0]->setFillColor(sf::Color::Cyan);
@@ -81,18 +81,17 @@ void CrazyBall::update(sf::Time dt)
             ball[0]->setPosition(currentPos);
         }
         break;
-    case 4:
+    case 4:   // change ball direction
         if (ball[0]->getDirection() == Ball::Direction::Down)
         {
             ball[0]->setFillColor(sf::Color::Magenta);
             ball[0]->setDirection(Ball::Direction::Up);
             sf::sleep(sf::Time(sf::seconds(0.25f)));
-            //clock.restart();
         }
         break;
-    case 5:
-        ball[0]->setRadius(rand() % 3 * 3.f + 6.0f);
-        ball[0]->setFillColor(Yellow);
+    case 5:   // change ball size
+        ball[0]->setRadius(rand() % 4 * 3.f + 6.0f);
+        ball[0]->setFillColor(Brown);
         break;
     default:
         ;

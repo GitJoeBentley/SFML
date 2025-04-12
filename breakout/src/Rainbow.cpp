@@ -5,7 +5,7 @@
 const sf::Color Rainbow::Color[7] = {Red, Orange, Yellow, Green, Blue, Indigo, Violet};
 
 
-Rainbow::Rainbow(sf::RenderWindow& wnd) : Game(wnd, 5, 7)
+Rainbow::Rainbow(sf::RenderWindow& wnd) : Game(wnd, 5, 7, 77)
 {
     setup();
 }

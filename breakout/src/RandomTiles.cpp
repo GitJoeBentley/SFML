@@ -2,18 +2,19 @@
 #include "constants.h"
 #include "proto.h"
 
-RandomTiles::RandomTiles(sf::RenderWindow& wnd) : Game(wnd, 6, 7, 70)
+RandomTiles::RandomTiles(sf::RenderWindow& wnd) : Game(wnd, 6, 10, 109)
 {
     setup();
 }
 
 void RandomTiles::setup()
 {
-    int tileRows = 9;
+    //int tileRows = 9;
+    int tileRows = 7;
     int tileCols = 16;
     float tileWidth = 48.0f;
     ball[0] = new Ball(9.0f, 600.0f);  // radius = 9, speed = 600
-    tiles = new Tiles(tileRows, tileCols, tileWidth);      // 10 rows, 15 columns, tile size 48x16
+    tiles = new Tiles(tileRows, tileCols, tileWidth);
     numTiles = tileRows * tileCols;
     paddle = new Paddle;   // paddle width = 64
     sf::Vector2f tilePos;
@@ -71,7 +72,7 @@ int RandomTiles::processHitTile(Tile* ptrTile, int)
         break;
     case 4:
         ball[0]->setFillColor(sf::Color::Black);
-        LoopCounter = 1000 + rand()%1000;
+        LoopCounter = 3000 + rand() % 1000;
         break;
     case 5:
 

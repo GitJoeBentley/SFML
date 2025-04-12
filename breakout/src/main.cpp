@@ -51,6 +51,9 @@ int main ()
 
     Game* game = nullptr;
     GameSelection gameSelection = GameSelection::New;
+    TextBox* tb;
+    std::string statement;
+    bool hasAHighScore = false;
 
     //GAME CLOCK & TIMER
     sf::Clock clock;
@@ -153,9 +156,7 @@ int main ()
             window.display();
         }  // End of the Game Loop
 
-        TextBox* tb;
-        std::string statement;
-        bool hasAHighScore = false;
+        // Create statement for end of game status
         switch (game->getStatus())
         {
         case Game::GameStatus::Quit:
@@ -180,7 +181,7 @@ int main ()
         if (game->getScore() && game->getHighScores()->eligible(game->getScore()))
         {
             hasAHighScore = true;
-             soundEffect[SoundEffect::EndOfGame].play();
+            soundEffect[SoundEffect::EndOfGame].play();
             if (game->getScore() > game->getHighScores()->getHightestScore())
                 statement += "\n             Congratulations!!!\n    You have the highest score!!!\n";
             else statement += "\n             Congratulations!!!\n     You made the leader board  \n";

@@ -2,7 +2,7 @@
 
 const sf::Color Tiles150::Color[7] = { Red, Orange, Yellow, Green, Blue};
 
-Tiles150::Tiles150(sf::RenderWindow& wnd) : Game(wnd, 9, 7, 75)
+Tiles150::Tiles150(sf::RenderWindow& wnd) : Game(wnd, 9, 10, 100)
 {
     setup();
 }
@@ -59,11 +59,13 @@ int Tiles150::processHitTile(Tile* ptrTile, int)
     if (index == 0 and numTiles > 30)
     {
         ptrTile->setPosition(Tiles150::randomTilePosition());
+        ball[0]->speedUp(3);
     }
     else
     {
         tiles->removeTile(ptrTile);
     }
+
     numTiles--;
     return tileValue;
 }

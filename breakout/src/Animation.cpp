@@ -5,7 +5,7 @@ Animation::Animation(sf::Vector2f pos) : ball(new Ball(8.0f, 200.0f))
 {
     sf::Vector2f tileSize = sf::Vector2f(30.0f, 10.0f);
     setPosition(pos);
-    setSize(sf::Vector2f(10.0f*32.f,8.0f*12.0f));
+    setSize(sf::Vector2f(10.0f * 32.f, 8.0f * 12.0f));
     setFillColor(sf::Color::Black);
     setOutlineColor(Blue);
     setOutlineThickness(2.0f);
@@ -41,11 +41,13 @@ Animation::Animation(sf::Vector2f pos) : ball(new Ball(8.0f, 200.0f))
 
 Animation::~Animation()
 {
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 32; i++)
     {
         delete tile[i];
         tile[i] = nullptr;
     }
+    delete ball;
+    ball = nullptr;
 }
 
 void Animation::draw(sf::RenderWindow& window)
@@ -58,7 +60,7 @@ void Animation::draw(sf::RenderWindow& window)
     window.draw(*ball);
 }
 
-void Animation::hitATile()
+void Animation::hitATile() const
 {
     float angle;
     for (int i = 0; i < 32; i++ )

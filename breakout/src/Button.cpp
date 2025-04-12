@@ -24,6 +24,7 @@ void Button::draw(sf::RenderWindow& window)
 void Button::highlight()
 {
     setFillColor(highlightedColor);
+    text.setFillColor(sf::Color::Black);
     setOutlineColor(sf::Color(0x004844ff));
     setOutlineThickness(3.0f);
 }
@@ -31,6 +32,7 @@ void Button::highlight()
 void Button::normal()
 {
     setFillColor(color);
+    text.setFillColor(sf::Color::White);
     setOutlineColor(Indigo);
     setOutlineThickness(5.0f);
 }
