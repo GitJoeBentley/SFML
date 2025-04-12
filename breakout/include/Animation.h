@@ -14,13 +14,13 @@ class Animation : public sf::RectangleShape
         Animation(sf::Vector2f pos);
         virtual ~Animation();
         void draw(sf::RenderWindow& window);
-        void hitATile();
-        Game::SideOfTile hitTileSide(const Tile* tile) const;
         void update(sf::Time dt);
+        void hitATile() const;
 
     private:
         Tile* tile[32];
         Ball* ball;
+        Game::SideOfTile hitTileSide(const Tile* tile) const;
 };
 
 #endif // ANIMATION_H

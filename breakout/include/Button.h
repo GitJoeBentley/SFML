@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "constants.h"
 
 class Button : public sf::RectangleShape
 {
@@ -15,8 +16,8 @@ public:
     void setColor(sf::Color buttColor, sf::Color textColor);
 private:
     sf::Text text;
-    sf::Color color = sf::Color::Blue;
-    sf::Color highlightedColor = sf::Color(0x0ebd5fff);
+    sf::Color color = Blue;
+    sf::Color highlightedColor = LightGreen;
 };
 
 #endif // BUTTON_H
