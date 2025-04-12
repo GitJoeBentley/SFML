@@ -8,4 +8,8 @@ changes color and leaves the inner rectangle.
 Tiles are worth one point each if you hit them with the first ball 
 and two points it you hit them with the second ball.
 
+The ball speed(s) are slow (500 and 250), but when both balls are
+active it is hard to keep them both in play.  You have 10 balls and
+100 seconds to go after 128 tiles.
+
 Good luck

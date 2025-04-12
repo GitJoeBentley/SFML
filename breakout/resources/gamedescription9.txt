@@ -12,6 +12,11 @@ Orange = 4
 Red = 5      (the smallest tile)
 
 When you hit a red tile, a new one with be generated in a different 
-location.
+location.  This happens until you've hit 30 red tiles.
+
+The ball starts fairly slow (500), but increase by 3% whenever you
+hit a red tile.  You've got 10 balls and 100 seconds to go after
+120 tiles.
+
 
 Good luck

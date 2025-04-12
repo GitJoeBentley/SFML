@@ -1,6 +1,10 @@
 The Crusher
 
-The are lots of tiles in the game, and watch out! Every time you miss the 
-ball, the tiles move down and the ball will speed up a little. 
+This game is impossible to win.  There are 150 tiles.
+The ball is fast (600).  You have 10 balls, but that's
+not enough.  Every time you miss the ball, the tiles
+move down and the ball will speeds up a little. You'll
+need lightning fast reactions and ball control to even
+stand a chance.
  
 Good luck

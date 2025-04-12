@@ -11,4 +11,6 @@ Blue   (5 points) Ball blanks out intermittently
 Indigo (6 points) Ball jumps to the left or right
 Violet (7 points) Ball bounce is unpredictable and ball speeds up
 
+You get 10 balls and 109 seconds to go after the 109 tiles.
+
 Good luck

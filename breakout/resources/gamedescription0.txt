@@ -1,7 +1,7 @@
 EASY GAME
 
 This is the easiest game to play.  It is for beginners and it's a good
-place to start.  The ball is relatively slow, the paddle is big, and
-there are not many tiles.
+place to start.  The ball is relatively slow (500), the paddle is big,
+and there are only 48 tiles.
 
 Good luck

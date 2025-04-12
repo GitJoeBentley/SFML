@@ -1,6 +1,6 @@
 BASIC GAME
 
-This is a competitive game.  The ball will move faster, the paddle is smaller, and 
-there are move tiles to hit.  Your goal is to remove all of the times.
+This is the basic breakout game.  The ball will moves faster (600) and the paddle is smaller.
+You have 8 balls and 80 seconds to hits 80 tiles.
 
 Good luck

@@ -4,8 +4,11 @@ In this game, tiles will randomly start falling.  Falling tiles are
 smaller than their original size and they fall at different rates.
 
 If you hit a falling tile, it is worth 10 points, and causes the ball
-to speed up a little bit.  If a falling tile gets passed the paddle, 
+to speed up a little bit (3%).  If a falling tile gets passed the paddle, 
 you lose 10 points.  If a falling tile hits the paddle, you automatically 
-lose the game.  
+lose the game.
+
+The ball starts off pretty fast (600).  There are 80 tiles and you get
+8 balls and 80 seconds to play.  
 
 Good luck
