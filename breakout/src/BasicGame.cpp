@@ -1,7 +1,7 @@
 #include <cstdint>
 #include "BasicGame.h"
 
-BasicGame::BasicGame(sf::RenderWindow& wnd) : Game(wnd, 1, 8, 80)
+BasicGame::BasicGame(sf::RenderWindow& wnd) : Game(wnd, 1, 7, 90)
 {
     setup();
 }

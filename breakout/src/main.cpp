@@ -39,8 +39,6 @@ int main ()
 {
     srand(static_cast<unsigned>(time(0)));
 
-    bool joyStickConnected = hasJoystick();
-
     // Fonts
     sf::Font font;
     font.loadFromFile(ResourcePath + "Arial.ttf");
@@ -65,6 +63,7 @@ int main ()
     title->setFillColor(sf::Color::Green);
     sf::FloatRect textRect = title->getLocalBounds();
     title->setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+
     // Note: Title x-position adjusted (72.0f) for difference in RenderWindow size
     title->setPosition(sf::Vector2f(RenderWindowSize.x/2.0f + 72.0f, 0.05f * RenderWindowSize.y));
 
@@ -134,8 +133,7 @@ int main ()
         //////////// The GAME loop
         while (game && (game->getStatus() == Game::GameStatus::NotStarted || game->getStatus() == Game::GameStatus::Active))
         {
-            if (joyStickConnected) sf::Joystick::update();
-            pollEvent(window, clock, game, joystick, joyStickConnected);
+            pollEvent(window, clock, game, joystick);
 
             // Start of Active Game loop
             if (game->getStatus() == Game::GameStatus::Active)
@@ -150,7 +148,7 @@ int main ()
             game->drawGameObjects();
             if (game->getStatus() == Game::GameStatus::NotStarted)
             {
-                message.setString("Press the Start button or the Space bar to begin");
+                message.setString("To start the game,\npress the Space Bar on the Keyboard,\nthe Left Button on the Mouse,\nor the Start Button on the Controller");
                 drawCenteredText(message, window);
             }
             window.display();
@@ -176,6 +174,8 @@ int main ()
         default:
             ;
         }
+        window.setMouseCursorVisible(true);
+
 
         // Record Game Score to High Scores?
         if (game->getScore() && game->getHighScores()->eligible(game->getScore()))

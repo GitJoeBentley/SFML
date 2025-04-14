@@ -136,9 +136,29 @@ int getColorIndex(sf::Color color)
     return -1;
 }
 
-void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick, bool joyStickConnected)
+void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick)
 {
+    int currentMPosX;
+    static int minMouseX = static_cast<int>(GameBorderWidth + game->getPaddle()->getSize().x / 2);
+    static int maxMouseX = static_cast<int>(GameWindowSize.x + GameBorderWidth - game->getPaddle()->getSize().x / 2);
     sf::Event event;
+
+    if (game->getDevice() == Game::Control::Mouse)
+    {
+        currentMPosX = sf::Mouse::getPosition(window).x;
+        if (currentMPosX < minMouseX)
+        {
+            sf::Mouse::setPosition(sf::Vector2i(minMouseX,sf::Mouse::getPosition(window).y), window);
+            currentMPosX = minMouseX;
+        }
+        if (currentMPosX > maxMouseX)
+        {
+            sf::Mouse::setPosition(sf::Vector2i(maxMouseX,sf::Mouse::getPosition(window).y), window);
+            currentMPosX = maxMouseX;
+        }
+        game->getPaddle()->setPosition(sf::Vector2f(currentMPosX, game->getPaddle()->getPosition().y));
+    }
+
     while (window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
@@ -152,30 +172,24 @@ void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vecto
             return;
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+        if (game->getStatus() == Game::GameStatus::NotStarted)
         {
-            if (game->getStatus() == Game::GameStatus::Paused)
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) game->setDevice(Game::Control::Keyboard);
+            if (sf::Joystick::isButtonPressed(0,7)) game->setDevice(Game::Control::Joystick);
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) game->setDevice(Game::Control::Mouse);
+            if (game->getDevice() != Game::Control::None)
             {
+                window.setMouseCursorVisible(false);
                 game->setStatus(Game::GameStatus::Active);
-                return;
+                clock.restart();
+                game->decrementNumBalls();
             }
-            else
-            {
-                game->setStatus(Game::GameStatus::Paused);
-                return;
-            }
-        }
-
-        if (game->getStatus() == Game::GameStatus::NotStarted && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Joystick::isButtonPressed(0,7)))
-        {
-            game->setStatus(Game::GameStatus::Active);
-            clock.restart();
-            game->decrementNumBalls();
             return;
         }
 
-        if (joyStickConnected)
+        if (game->getDevice() == Game::Control::Joystick)
         {
+            sf::Joystick::update();
             joystick = sf::Vector2f(sf::Joystick::getAxisPosition(0, sf::Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
         }
 
@@ -410,7 +424,8 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
                             // Clean up before leaving
                             delete [] butRect;
                             butRect = nullptr;
-                            for (int i = 0; i < 10; i++) {
+                            for (int i = 0; i < 10; i++)
+                            {
                                 delete animation[i];
                                 animation[i] = nullptr;
                             }
@@ -434,7 +449,8 @@ int start(sf::RenderWindow& window, sf::Font& font, sf::Text* title)
             }
         }
         // process animations
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++)
+        {
             animation[i]->update(dt);
             animation[i]->hitATile();
         }
