@@ -1,2 +1,21 @@
 Joe's Breakout Game
-These are the general directions for all games/
+
+This game was inspired by the Atari Breakout game (1976) and the open source LBreakout2 game.
+This game, instead of a series of levels, consists of 10 variations of breakout with different
+behaviors given to the game balls, the paddle, and events such as hitting a tile, hitting the
+ball with the paddle of missing the ball.
+
+The goal in all variations of the game is to hit as many tiles as possible with the available
+balls and within the allotted time. To win any of the games, except "One Red Tile", you must 
+remove (hit) all of the tiles.  This makes it very difficult to win most of the games.  You have
+the opportunity to achieve a high score and make the top-10 leaderboard for each game.  Each
+game awards points in a various ways.
+
+To play the game, you may use right and left arrow keys on the keyboard, a game controller using
+the joystick, or a mouse to move the paddle left and right.  Each game has a different number of
+tiles, a  different number of balls available, and different time allotments.
+
+To get started, choose any one of the 10 games on the main screen by clicking with the left-mouse
+button.  You can also get a game description using the right-mouse button.
+
+Best of luck
