@@ -17,6 +17,7 @@ public:
     enum class GameStatus {NotStarted, Active, Paused, Win, OutOfTime, OutOfBalls, TileHitsPaddle, GameOver, Quit};
     enum class SideOfTile {None, Top, Bottom, Left, Right};
     enum class Ball2Status { Inactive, Active};
+    enum class Control {None, Keyboard, Mouse, Joystick};
 
     Game(sf::RenderWindow& wnd, int gameNumber, int balls = 5, int time_remaining = INT_MAX);
     virtual ~Game();
@@ -41,6 +42,7 @@ public:
     bool ball2IsActive() const;
     float ballHeight(int ballNo = 0) const;
     float ballXPosition(int ballNo = 0) const;
+    Game::Control getDevice() const { return device; }
 
     // non-const accessors
     sf::RectangleShape& getGameWindow();
@@ -70,6 +72,7 @@ public:
     void updateTimer();
     void manageBall(SoundEffect& soundEffect);
     void managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& clock);
+    void setDevice(Control dev) { device = dev; }
 protected:
     sf::RenderWindow& window;
     GameStatus status = GameStatus::NotStarted;
@@ -95,6 +98,8 @@ protected:
     int LoopCounter = 0;
     Ball2Status ball2Status = Ball2Status::Inactive;
     sf::FloatRect innerRect;
+    Control device = Control::None;
+
 
 private:
     SideOfTile hitTileSide(const Tile* tile, int ballNo = 0) const;

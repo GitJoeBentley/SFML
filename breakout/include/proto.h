@@ -13,7 +13,7 @@ bool buttonIsClicked(sf::RectangleShape& button, sf::Vector2f mousePosition);
 void drawCenteredText(sf::Text& text, sf::RenderWindow& window);
 std::string getName(sf::RenderWindow& window, sf::Font& font, Game* game);
 int getColorIndex(sf::Color color);
-void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick, bool joyStickConnected);
+void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick);
 
 
 #endif // PROTO_H_INCLUDED
