@@ -74,6 +74,9 @@ int main ()
     SoundEffect soundEffect;
 
     sf::Vector2f joystick = sf::Vector2f(0.f,0.f);
+    std::string startStr = "To start the game,\nPress the Space Bar on the Keyboard,\nor the Left Button on the Mouse";
+    if (sf::Joystick::isConnected(0)) startStr += "\nor the Start Button on the Controller";
+
 
     while (gameSelection != GameSelection::Exit)
     {
@@ -133,6 +136,7 @@ int main ()
         //////////// The GAME loop
         while (game && (game->getStatus() == Game::GameStatus::NotStarted || game->getStatus() == Game::GameStatus::Active))
         {
+            // Look at the mouse, keyboard, or controller
             pollEvent(window, clock, game, joystick);
 
             // Start of Active Game loop
@@ -148,7 +152,7 @@ int main ()
             game->drawGameObjects();
             if (game->getStatus() == Game::GameStatus::NotStarted)
             {
-                message.setString("To start the game,\npress the Space Bar on the Keyboard,\nthe Left Button on the Mouse,\nor the Start Button on the Controller");
+                message.setString(startStr);
                 drawCenteredText(message, window);
             }
             window.display();
@@ -176,6 +180,7 @@ int main ()
         }
         window.setMouseCursorVisible(true);
 
+        if (game->getStatus() == Game::GameStatus::Quit) break;
 
         // Record Game Score to High Scores?
         if (game->getScore() && game->getHighScores()->eligible(game->getScore()))

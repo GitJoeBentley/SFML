@@ -280,12 +280,12 @@ void Game::managePaddle(SoundEffect& soundEffect, sf::Text& message, sf::Clock& 
         soundEffect[SoundEffect::PaddleHitWall].play();
     }
     // Paddle hits ball?
-    else if (paddleHitsBall() || (gameNumber == 7 && paddleHitsBall(1)))
+    if (paddleHitsBall() || (gameNumber == 7 && paddleHitsBall(1)))
     {
         soundEffect[SoundEffect::PaddleHitBall].play();
     }
     // Paddle misses ball?
-    else if (paddleMissesBall() || (gameNumber == 7 && paddleMissesBall(1)))
+    if (paddleMissesBall() || (gameNumber == 7 && paddleMissesBall(1)))
     {
         if (numBalls == 0)
         {
@@ -473,13 +473,13 @@ bool Game::paddleHitsWall()
     sf::Vector2f paddlePos = paddle->getPosition();
     if (paddle->right() >= rightSideOfWindow() - GameBorderWidth)
     {
-        paddlePos.x -= 3.0f;
+        paddlePos.x -= 10.0f;
         paddle->setPosition(paddlePos);
         return true;
     }
     if (paddle->left() <= leftSideOfWindow() + GameBorderWidth)
     {
-        paddlePos.x += 3.0f;
+        paddlePos.x += 10.0f;
         paddle->setPosition(paddlePos);
         return true;
     }

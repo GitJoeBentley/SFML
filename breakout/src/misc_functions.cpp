@@ -138,26 +138,35 @@ int getColorIndex(sf::Color color)
 
 void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vector2f& joystick)
 {
-    int currentMPosX;
+    /////////////// Manage the move movement ///////////////
+    sf::Vector2i currentMPos;
+    static sf::Vector2i lastMPos = sf::Vector2i(0,0);
     static int minMouseX = static_cast<int>(GameBorderWidth + game->getPaddle()->getSize().x / 2);
     static int maxMouseX = static_cast<int>(GameWindowSize.x + GameBorderWidth - game->getPaddle()->getSize().x / 2);
-    sf::Event event;
 
     if (game->getDevice() == Game::Control::Mouse)
     {
-        currentMPosX = sf::Mouse::getPosition(window).x;
-        if (currentMPosX < minMouseX)
+        currentMPos = sf::Mouse::getPosition(window);
+        if (currentMPos != lastMPos)
         {
-            sf::Mouse::setPosition(sf::Vector2i(minMouseX,sf::Mouse::getPosition(window).y), window);
-            currentMPosX = minMouseX;
+            if (currentMPos.x < minMouseX)
+            {
+                sf::Mouse::setPosition(sf::Vector2i(minMouseX,sf::Mouse::getPosition(window).y), window);
+                currentMPos.x = minMouseX;
+            }
+            if (currentMPos.x > maxMouseX)
+            {
+                sf::Mouse::setPosition(sf::Vector2i(maxMouseX,sf::Mouse::getPosition(window).y), window);
+                currentMPos.x = maxMouseX;
+            }
+            game->getPaddle()->setPosition(sf::Vector2f(currentMPos.x, PaddleStartPosition.y));
+            lastMPos = currentMPos;
         }
-        if (currentMPosX > maxMouseX)
-        {
-            sf::Mouse::setPosition(sf::Vector2i(maxMouseX,sf::Mouse::getPosition(window).y), window);
-            currentMPosX = maxMouseX;
-        }
-        game->getPaddle()->setPosition(sf::Vector2f(currentMPosX, game->getPaddle()->getPosition().y));
+        return;
     }
+
+    /////////////// Manage keyboard or joystick ///////////////
+    sf::Event event;
 
     while (window.pollEvent(event))
     {
@@ -166,6 +175,7 @@ void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vecto
             game->setStatus(Game::GameStatus::Quit);
             return;
         }
+        if (game->getDevice() == Game::Control::Mouse) return;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Joystick::isButtonPressed(0,0))
         {
             game->setStatus(Game::GameStatus::Quit);
@@ -184,7 +194,7 @@ void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vecto
                 clock.restart();
                 game->decrementNumBalls();
             }
-            return;
+            continue;
         }
 
         if (game->getDevice() == Game::Control::Joystick)
@@ -208,8 +218,6 @@ void pollEvent(sf::RenderWindow& window, sf::Clock& clock, Game* game, sf::Vecto
         }
     }
 }
-
-
 
 std::string getName(sf::RenderWindow& window, sf::Font& font, Game* game)
 {
